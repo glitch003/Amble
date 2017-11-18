@@ -1,8 +1,12 @@
-package com.amble;
+package co.sdkd.amble;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.oblador.keychain.KeychainPackage;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,7 +26,11 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+            new RandomBytesPackage(),
+            new KeychainPackage(),
+            new RCTCameraPackage(),
+            new ReactNativePushNotificationPackage()
       );
     }
 

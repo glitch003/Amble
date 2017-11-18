@@ -1,4 +1,4 @@
-package com.amble;
+package co.sdkd.amble;
 
 import com.facebook.react.ReactActivity;
 
