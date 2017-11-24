@@ -32,7 +32,7 @@ export default class Home extends React.Component {
     }
   }
   componentWillMount () {
-    this.state.wallet.activate({email: 'cvcassano+ios@gmail.com'})
+    this.state.wallet.activate({email: 'cvcassano+' + Platform.OS + '@gmail.com'})
     .then(() => {
       // check balance
       console.log('[SDKD]: checking balance')
