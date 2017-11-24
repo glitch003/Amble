@@ -4,7 +4,9 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  Button,
+  TouchableOpacity,
+  Image
 } from 'react-native'
 
 import SDKDConfig from '@sdkd/sdkd'
@@ -27,7 +29,7 @@ export default class Home extends React.Component {
     global.currentWallet = w
     this.state = {
       wallet: w,
-      balance: 'loading...'
+      balance: 0
       // recovering: true
     }
   }
@@ -62,15 +64,15 @@ export default class Home extends React.Component {
     // }
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => { this.props.navigation.navigate('DrawerToggle') }}>
-          <Text style={styles.welcome}>
-            Welcome to React Native!
-          </Text>
-        </TouchableHighlight>
-        <Text>
-          Your balance is {this.state.balance} Wei
+        <Text style={styles.welcome}>
+          Balance: {this.state.wallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
         </Text>
-        {this.state.wallet.ready ? this.state.wallet.renderAddressQRCode() : null}
+        <TouchableOpacity>
+          <Image style={styles.buttons} source={require('../images/Send.png')} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Receive')}>
+          <Image style={styles.buttons} source={require('../images/Recieve.png')} />
+        </TouchableOpacity>
       </View>
     )
   }
@@ -79,7 +81,7 @@ export default class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
@@ -88,9 +90,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
+  buttons: {
+    margin: 10
   }
 })

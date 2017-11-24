@@ -7,19 +7,19 @@ import {
   TouchableHighlight
 } from 'react-native'
 
-export default class Notifications extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      notifications: []
-    }
-  }
-  componentWillMount () {
-    global.currentWallet.getNotifications()
-    .then(response => {
-      this.setState({ notifications: response })
-    })
-  }
+export default class Receive extends React.Component {
+  // constructor () {
+  //   super()
+  //   this.state = {
+  //     notifications: []
+  //   }
+  // }
+  // componentWillMount () {
+  //   global.currentWallet.getNotifications()
+  //   .then(response => {
+  //     this.setState({ notifications: response })
+  //   })
+  // }
   render () {
     // use this snippet as an example of how you can recover a user's account from a QR code that was sent to their email
     // if (this.state.recovering) {
@@ -33,9 +33,12 @@ export default class Notifications extends React.Component {
     // }
     return (
       <View style={styles.container}>
-        <Text>
-          Your notifications are {JSON.stringify(this.state.notifications)}
+        <Text style={styles.welcome}>
+          Address: {global.currentWallet.getAddressString()}
         </Text>
+        <View style={styles.qrCode}>
+          {global.currentWallet.renderAddressQRCode()}
+        </View>
       </View>
     )
   }
@@ -53,9 +56,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
+  qrCode: {
+    margin: 10
   }
 })

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native'
 
 import { DrawerNavigator, StackNavigator } from 'react-navigation'
@@ -14,6 +14,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Home from './scenes/Home'
 import Notifications from './scenes/Notifications'
 import PicEncrypt from './scenes/PicEncrypt'
+import Transactions from './scenes/Transactions'
+import Receive from './scenes/Receive'
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)
@@ -31,17 +33,49 @@ const headerLeft = (navigation) => {
   )
 }
 
+const headerRight = (navigation) => {
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('DrawerToggle')}>
+      <Ionicons
+        name='md-qr-scanner'
+        size={20}
+        style={{paddingRight: 10}}
+      />
+    </TouchableOpacity>
+  )
+}
+
 const homeScreenStack = StackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: 'Amble',
+        drawerLabel: 'Amble',
+        drawerIcon: ({ tintColor, focused }) => (
+          <Ionicons
+            name={focused ? 'ios-home' : 'ios-home-outline'}
+            size={20}
+            style={{ color: tintColor }}
+          />
+        ),
+        headerLeft: headerLeft(navigation),
+        headerRight: headerRight(navigation)
+      })
+    },
+    Receive: {
+      screen: Receive,
+      navigationOptions: ({ navigation }) => ({
+        headerMode: 'screen',
+        headerTitle: 'Receive'
+      })
     }
   },
   {
     navigationOptions: ({ navigation }) => ({
       initialRouteName: 'Home',
       headerMode: 'screen',
-      headerTitle: 'Amble',
       drawerLabel: 'Amble',
       drawerIcon: ({ tintColor, focused }) => (
         <Ionicons
@@ -50,7 +84,8 @@ const homeScreenStack = StackNavigator(
           style={{ color: tintColor }}
         />
       ),
-      headerLeft: headerLeft(navigation)
+      headerStyle: {backgroundColor: '#63B4D1'},
+      headerTintColor: '#FFFFFF'
     })
   }
 )
@@ -103,6 +138,30 @@ const picEncryptStack = StackNavigator(
   }
 )
 
+const transactionsStack = StackNavigator(
+  {
+    Transactions: {
+      screen: Transactions
+    }
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      initialRouteName: 'Transactions',
+      headerMode: 'screen',
+      headerTitle: 'Transactions',
+      drawerLabel: 'Transactions',
+      drawerIcon: ({ tintColor, focused }) => (
+        <Ionicons
+          name={focused ? 'ios-filing' : 'ios-filing-outline'}
+          size={20}
+          style={{ color: tintColor }}
+        />
+      ),
+      headerLeft: headerLeft(navigation)
+    })
+  }
+)
+
 const App = DrawerNavigator(
   {
     Home: {
@@ -113,6 +172,9 @@ const App = DrawerNavigator(
     },
     PicEncrypt: {
       screen: picEncryptStack
+    },
+    Transactions: {
+      screen: transactionsStack
     }
   }
 )
