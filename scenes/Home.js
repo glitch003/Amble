@@ -5,6 +5,8 @@ import {
   Text,
   View,
   Button,
+  ScrollView,
+  RefreshControl,
   TouchableOpacity,
   Image
 } from 'react-native'
@@ -29,27 +31,25 @@ export default class Home extends React.Component {
     global.currentWallet = w
     this.state = {
       wallet: w,
-      balance: 0
+      balance: 0,
+      scanning: false,
+      refreshing: false
       // recovering: true
     }
+  }
+  componentWillReceiveProps (nextProps) {
+    console.log('componentWillReceiveProps: ' + JSON.stringify(nextProps))
   }
   componentWillMount () {
     this.state.wallet.activate({email: 'cvcassano+' + Platform.OS + '@gmail.com'})
     .then(() => {
       // check balance
-      console.log('[SDKD]: checking balance')
-      return this.state.wallet.getBalance()
+      this.checkBalance()
     })
-    .then(balance => {
-      console.log('[SDKD]: setting balance')
-      this.setState({balance})
-      // if(balance > 0){
-      //   // try sending tx
-      //   return w.sendTx('0x164f64dac95870b7b1261e233221778b1186102a', 100);
-      // }
-    })
-    // .then(txData => console.log(txData))
     .catch(err => { throw new Error(err) })
+  }
+  componentDidMount () {
+    this.props.navigation.setParams({ toggleScanner: this.toggleScanner.bind(this) })
   }
   render () {
     // use this snippet as an example of how you can recover a user's account from a QR code that was sent to their email
@@ -62,19 +62,56 @@ export default class Home extends React.Component {
     //     .then(balance => this.setState({balance}))
     //   })
     // }
+    if (this.state.scanning) {
+      return this.state.wallet.renderSendTxQRScanner((data) => {
+        console.log('renderSendTxQRScanner callback data: ' + JSON.stringify(data))
+        this.setState({scanning: false})
+        this.props.navigation.navigate('Send', {txData: data})
+      })
+    }
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh.bind(this)}
+          />
+        }
+      >
+        <Text style={styles.balance}>
           Balance: {this.state.wallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Send')}>
           <Image style={styles.buttons} source={require('../images/Send.png')} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Receive')}>
           <Image style={styles.buttons} source={require('../images/Recieve.png')} />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     )
+  }
+  toggleScanner () {
+    this.setState({scanning: !this.state.scanning})
+  }
+  onRefresh () {
+    this.setState({refreshing: true})
+    this.checkBalance()
+    .then(() => {
+      this.setState({refreshing: false})
+    })
+  }
+  checkBalance () {
+    console.log('[Amble]: checking balance')
+    return new Promise((resolve, reject) => {
+      this.state.wallet.getBalance()
+      .then(balance => {
+        console.log('[Amble]: setting balance to ' + balance)
+        this.setState({balance})
+        resolve(balance)
+      })
+      .catch(err => reject(err))
+    })
   }
 }
 
@@ -83,12 +120,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#AFD2E9'
   },
-  welcome: {
+  balance: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10
+    color: '#000000',
+    margin: 10,
+    marginTop: 30
   },
   buttons: {
     margin: 10

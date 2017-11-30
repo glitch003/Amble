@@ -1,14 +1,10 @@
 import './shim.js'
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native'
 
-import { DrawerNavigator, StackNavigator } from 'react-navigation'
+import { DrawerNavigator, StackNavigator, NavigationActions } from 'react-navigation'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import Home from './scenes/Home'
@@ -16,6 +12,7 @@ import Notifications from './scenes/Notifications'
 import PicEncrypt from './scenes/PicEncrypt'
 import Transactions from './scenes/Transactions'
 import Receive from './scenes/Receive'
+import Send from './scenes/Send'
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)
@@ -26,21 +23,37 @@ const headerLeft = (navigation) => {
       onPress={() => navigation.navigate('DrawerToggle')}>
       <Ionicons
         name='md-menu'
-        size={20}
-        style={{paddingLeft: 10}}
+        size={40}
+        style={{paddingLeft: 10, color: '#FFFFFF'}}
       />
     </TouchableOpacity>
   )
 }
 
 const headerRight = (navigation) => {
+  const { params = {} } = navigation.state
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('DrawerToggle')}>
+      onPress={() => {
+        params.toggleScanner()
+      }}>
       <Ionicons
         name='md-qr-scanner'
-        size={20}
-        style={{paddingRight: 10}}
+        size={40}
+        style={{paddingRight: 10, color: '#FFFFFF'}}
+      />
+    </TouchableOpacity>
+  )
+}
+
+const backButtonHeaderLeft = (navigation) => {
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(NavigationActions.back())}>
+      <Ionicons
+        name='ios-arrow-back'
+        size={40}
+        style={{paddingLeft: 10}}
       />
     </TouchableOpacity>
   )
@@ -68,7 +81,16 @@ const homeScreenStack = StackNavigator(
       screen: Receive,
       navigationOptions: ({ navigation }) => ({
         headerMode: 'screen',
-        headerTitle: 'Receive'
+        headerTitle: 'Receive',
+        headerLeft: backButtonHeaderLeft(navigation)
+      })
+    },
+    Send: {
+      screen: Send,
+      navigationOptions: ({ navigation }) => ({
+        headerMode: 'screen',
+        headerTitle: 'Send',
+        headerLeft: backButtonHeaderLeft(navigation)
       })
     }
   },

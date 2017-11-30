@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native'
 import Camera from 'react-native-camera'
 import crypto from 'react-native-crypto'
@@ -15,6 +16,7 @@ export default class PicEncrypt extends React.Component {
   constructor () {
     super()
     this.state = {
+      password: ''
     }
   }
   componentWillMount () {
@@ -31,6 +33,11 @@ export default class PicEncrypt extends React.Component {
           captureQuality={Camera.constants.CaptureQuality.high}
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}>
+          <TextInput
+            style={{height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white'}}
+            onChangeText={(password) => this.setState({password})}
+            value={this.state.password}
+          />
           <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
         </Camera>
       </View>
@@ -46,7 +53,7 @@ export default class PicEncrypt extends React.Component {
         // data.data has base64 image
         let img = data.data
         console.log('base64 pic length: ' + img.length)
-        let encrypted = AES.encrypt(img, 'muffins123').toString()
+        let encrypted = AES.encrypt(img, this.state.password).toString()
         console.log('encrypted length: ' + encrypted.length)
         let attachment = 'data:text/html;base64,' + Buffer.from(this.getDecryptionHtml(encrypted)).toString('base64')
         console.log('attachment length: ' + attachment.length)
@@ -87,7 +94,7 @@ export default class PicEncrypt extends React.Component {
     })
     sender.sendMessage(to, 'recovery@sdkd.co', subject, body, attachments)
     .then(response => {
-      console.log('email sent with response: ' + response)
+      console.log('email sent with response: ' + JSON.stringify(response))
     })
   }
 

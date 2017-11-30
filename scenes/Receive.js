@@ -33,8 +33,16 @@ export default class Receive extends React.Component {
     // }
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Address: {global.currentWallet.getAddressString()}
+        <Text style={styles.yourAddress}>
+          Your address:
+        </Text>
+        <Text
+          style={styles.welcome}
+          adjustsFontSizeToFit
+          allowFontScaling
+          minimumFontScale={1}
+          numberOfLines={1}>
+          {global.currentWallet.getAddressString()}
         </Text>
         <View style={styles.qrCode}>
           {global.currentWallet.renderAddressQRCode()}
@@ -47,16 +55,20 @@ export default class Receive extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F5FCFF'
   },
   welcome: {
-    fontSize: 20,
+    textAlign: 'center'
+  },
+  yourAddress: {
+    fontSize: 15,
     textAlign: 'center',
-    margin: 10
+    marginTop: 20,
+    marginBottom: 10
   },
   qrCode: {
-    margin: 10
+    marginTop: 20
   }
 })
