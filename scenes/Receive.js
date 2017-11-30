@@ -6,6 +6,7 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
+import theme from '../config/Theme'
 
 export default class Receive extends React.Component {
   // constructor () {
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: theme.sceneBackgroundColor
   },
   welcome: {
     textAlign: 'center'

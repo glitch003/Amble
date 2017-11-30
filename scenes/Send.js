@@ -10,6 +10,8 @@ import {
   Alert
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
+import theme from '../config/Theme'
+import AmbleButton from '../components/AmbleButton'
 
 export default class Send extends React.Component {
   constructor () {
@@ -87,9 +89,10 @@ export default class Send extends React.Component {
 
         {this.state.data === '' ? null : this.renderDataView()}
 
-        <TouchableOpacity onPress={this.sendTransaction.bind(this)}>
-          <Image style={styles.buttons} source={require('../images/Send.png')} />
-        </TouchableOpacity>
+        <AmbleButton
+          onPress={this.sendTransaction.bind(this)}
+          text='Send'
+        />
       </View>
     )
   }
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: theme.sceneBackgroundColor
   },
   welcome: {
     textAlign: 'center'

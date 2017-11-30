@@ -13,6 +13,8 @@ import {
 
 import SDKDConfig from '@sdkd/sdkd'
 import SDKDWallet from '@sdkd/sdkd-wallet'
+import theme from '../config/Theme'
+import AmbleButton from '../components/AmbleButton'
 
 const SDKD_APIKEY = ''
 
@@ -82,12 +84,14 @@ export default class Home extends React.Component {
         <Text style={styles.balance}>
           Balance: {this.state.wallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
         </Text>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Send')}>
-          <Image style={styles.buttons} source={require('../images/Send.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Receive')}>
-          <Image style={styles.buttons} source={require('../images/Recieve.png')} />
-        </TouchableOpacity>
+        <AmbleButton
+          onPress={() => this.props.navigation.navigate('Send')}
+          text='Send'
+        />
+        <AmbleButton
+          onPress={() => this.props.navigation.navigate('Receive')}
+          text='Receive'
+        />
       </ScrollView>
     )
   }
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#AFD2E9'
+    backgroundColor: theme.sceneBackgroundColor
   },
   balance: {
     fontSize: 20,

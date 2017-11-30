@@ -6,6 +6,7 @@ import {
   View,
   TouchableHighlight
 } from 'react-native'
+import theme from '../config/Theme'
 
 export default class Notifications extends React.Component {
   constructor () {
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: theme.sceneBackgroundColor
   },
   welcome: {
     fontSize: 20,
