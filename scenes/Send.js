@@ -19,7 +19,8 @@ export default class Send extends React.Component {
     this.state = {
       to: '',
       value: '',
-      data: ''
+      data: '',
+      buttonState: 'send'
     }
   }
 
@@ -90,8 +91,25 @@ export default class Send extends React.Component {
         {this.state.data === '' ? null : this.renderDataView()}
 
         <AmbleButton
-          onPress={this.sendTransaction.bind(this)}
-          text='Send'
+          buttonProps={{
+            buttonState: this.state.buttonState,
+            states: {
+              send: {
+                onPress: () => {
+                  this.setState({ buttonState: 'sending' })
+                  this.sendTransaction()
+                },
+                text: 'Send'
+              },
+              sending: {
+                onPress: () => {
+                  this.setState({ buttonState: 'send' })
+                },
+                spinner: true,
+                text: 'Sending...'
+              }
+            }
+          }}
         />
       </View>
     )

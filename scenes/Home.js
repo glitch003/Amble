@@ -85,12 +85,17 @@ export default class Home extends React.Component {
           Balance: {this.state.wallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
         </Text>
         <AmbleButton
-          onPress={() => this.props.navigation.navigate('Send')}
-          text='Send'
+          buttonProps={{
+            onPress: () => this.props.navigation.navigate('Send'),
+            text: 'Send'
+          }}
+          style={{marginTop: 50}}
         />
         <AmbleButton
-          onPress={() => this.props.navigation.navigate('Receive')}
-          text='Receive'
+          buttonProps={{
+            onPress: () => this.props.navigation.navigate('Receive'),
+            text: 'Receive'
+          }}
         />
       </ScrollView>
     )
@@ -132,8 +137,5 @@ const styles = StyleSheet.create({
     color: '#000000',
     margin: 10,
     marginTop: 30
-  },
-  buttons: {
-    margin: 10
   }
 })
