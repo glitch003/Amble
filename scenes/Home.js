@@ -29,7 +29,7 @@ export default class Home extends React.Component {
   constructor () {
     super()
     SDKDConfig.init(SDKD_APIKEY)
-    let w = new SDKDWallet({debug: true, gcmSenderId: '1048585096908'})
+    let w = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
     global.currentWallet = w
     this.state = {
       wallet: w,
@@ -105,6 +105,8 @@ export default class Home extends React.Component {
   }
   onRefresh () {
     this.setState({refreshing: true})
+    // check for any pushes, async
+    this.state.wallet.checkForActionableNotifications()
     this.checkBalance()
     .then(() => {
       this.setState({refreshing: false})

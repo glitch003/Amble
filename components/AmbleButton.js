@@ -3,20 +3,21 @@ import {
   StyleSheet,
   View
 } from 'react-native'
-import { RoundButton } from 'react-native-button-component'
+import { RectangleButton } from 'react-native-button-component'
 import theme from '../config/Theme'
 
 export default class AmbleButton extends React.Component {
   render () {
     return (
       <View style={[styles.buttonHolder, this.props.style]}>
-        <RoundButton
+        <RectangleButton
           textStyle={theme.buttonTextStyle}
-          width={200}
+          width={150}
           height={50}
           backgroundColors={theme.buttonBackgroundColors}
-          gradientStart={{x: 0.5, y: 0}}
-          gradientEnd={{x: 0.5, y: 1}}
+          gradientStart={{x: 0, y: 0}}
+          gradientEnd={{x: 1, y: 1}}
+          buttonStyle={{borderRadius: 5}}
           {...this.props.buttonProps}
         />
       </View>

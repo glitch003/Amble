@@ -2,11 +2,11 @@ let theme = {
   headerStyle: { backgroundColor: '#63B4D1' },
   headerTintColor: '#FFFFFF',
   headerIconColor: '#FFFFFF',
-  sceneBackgroundColor: '#AFD2E9',
+  sceneBackgroundColor: '#FFFFFF',
   buttonTextStyle: {
-    fontSize: 16,
+    fontSize: 14,
     letterSpacing: 2
   },
-  buttonBackgroundColors: ['#63B4D1', '#2E5EAA']
+  buttonBackgroundColors: ['#2E5EAA', '#2E5EAA']
 }
 module.exports = theme
