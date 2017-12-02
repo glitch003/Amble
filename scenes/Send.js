@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     padding: 4,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: 6
   }
 })
 
