@@ -7,21 +7,13 @@ import {
   RefreshControl
 } from 'react-native'
 
-import SDKDConfig from '@sdkd/sdkd'
-import SDKDWallet from '@sdkd/sdkd-wallet'
 import theme from '../config/Theme'
 import AmbleButton from '../components/AmbleButton'
-
-const SDKD_APIKEY = ''
 
 export default class Home extends React.Component {
   constructor () {
     super()
-    SDKDConfig.init(SDKD_APIKEY)
-    let w = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
-    global.currentWallet = w
     this.state = {
-      wallet: w,
       balance: 0,
       scanning: false,
       refreshing: false
@@ -32,29 +24,25 @@ export default class Home extends React.Component {
     console.log('componentWillReceiveProps: ' + JSON.stringify(nextProps))
   }
   componentWillMount () {
-    this.state.wallet.activate({email: 'cvcassano+' + Platform.OS + '@gmail.com'})
-    .then(() => {
-      // check balance
-      this.checkBalance()
-    })
-    .catch(err => { throw new Error(err) })
+    this.checkBalance()
   }
   componentDidMount () {
+    console.log('nav state: ' + JSON.stringify(this.props.navigation.state))
     this.props.navigation.setParams({ toggleScanner: this.toggleScanner.bind(this) })
   }
   render () {
     // use this snippet as an example of how you can recover a user's account from a QR code that was sent to their email
     // if (this.state.recovering) {
-    //   return this.state.wallet.renderRecoveryQRScanner(() => {
+    //   return global.currentWallet.renderRecoveryQRScanner(() => {
     //     console.log('wallet has been recovered')
-    //     console.log('address is ' + this.state.wallet.getAddressString())
+    //     console.log('address is ' + global.currentWallet.getAddressString())
     //     this.setState({recovering: false})
-    //     this.state.wallet.getBalance()
+    //     global.currentWallet.getBalance()
     //     .then(balance => this.setState({balance}))
     //   })
     // }
     if (this.state.scanning) {
-      return this.state.wallet.renderSendTxQRScanner((data) => {
+      return global.currentWallet.renderSendTxQRScanner((data) => {
         console.log('renderSendTxQRScanner callback data: ' + JSON.stringify(data))
         this.setState({scanning: false})
         this.props.navigation.navigate('Send', {txData: data})
@@ -71,7 +59,7 @@ export default class Home extends React.Component {
         }
       >
         <Text style={styles.balance}>
-          Balance: {this.state.wallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
+          Balance: {global.currentWallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
         </Text>
         <AmbleButton
           buttonProps={{
@@ -95,7 +83,7 @@ export default class Home extends React.Component {
   onRefresh () {
     this.setState({refreshing: true})
     // check for any pushes, async
-    this.state.wallet.checkForActionableNotifications()
+    global.currentWallet.checkForActionableNotifications()
     this.checkBalance()
     .then(() => {
       this.setState({refreshing: false})
@@ -104,7 +92,7 @@ export default class Home extends React.Component {
   checkBalance () {
     console.log('[Amble]: checking balance')
     return new Promise((resolve, reject) => {
-      this.state.wallet.getBalance()
+      global.currentWallet.getBalance()
       .then(balance => {
         console.log('[Amble]: setting balance to ' + balance)
         this.setState({balance})
