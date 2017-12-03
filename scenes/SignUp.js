@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
@@ -61,7 +61,7 @@ export default class SignUp extends React.Component {
         <AmbleButton
           buttonProps={{
             onPress: () => {
-              this.props.navigation.navigate('Send')
+              this.props.navigation.navigate('Recover')
             },
             text: 'Recover'
           }}

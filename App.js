@@ -32,12 +32,16 @@ export default class App extends React.Component {
         .then(() => {
           this.setState({ signedIn: true })
         })
-        .catch(err => { throw new Error(err) })
+        .catch(err => {
+          console.log('err jsonify: ' + JSON.stringify(err))
+          Alert.alert('Error', err.message)
+          this.setState({ signedIn: false })
+        })
       } else {
         this.setState({ signedIn: false })
       }
     })
-    .catch(err => Alert('An error occurred', err))
+    .catch(err => Alert.alert('An error occurred', err))
   }
 
   render () {
