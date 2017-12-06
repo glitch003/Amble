@@ -12,6 +12,7 @@ import PicEncrypt from './scenes/PicEncrypt'
 import Transactions from './scenes/Transactions'
 import Receive from './scenes/Receive'
 import Send from './scenes/Send'
+import Browser from './scenes/Browser'
 
 import theme from './config/Theme'
 
@@ -186,6 +187,33 @@ const SignedIn = DrawerNavigator(
             drawerIcon: ({ tintColor, focused }) => (
               <Ionicons
                 name={focused ? 'ios-filing' : 'ios-filing-outline'}
+                size={20}
+                style={{ color: tintColor }}
+              />
+            ),
+            headerLeft: headerLeft(navigation),
+            headerStyle: theme.headerStyle,
+            headerTintColor: theme.headerTintColor
+          })
+        }
+      )
+    },
+    Browser: {
+      screen: StackNavigator(
+        {
+          Browser: {
+            screen: Browser
+          }
+        },
+        {
+          navigationOptions: ({ navigation }) => ({
+            initialRouteName: 'Browser',
+            headerMode: 'screen',
+            headerTitle: 'Browser',
+            drawerLabel: 'Browser',
+            drawerIcon: ({ tintColor, focused }) => (
+              <Ionicons
+                name={focused ? 'ios-globe' : 'ios-globe-outline'}
                 size={20}
                 style={{ color: tintColor }}
               />

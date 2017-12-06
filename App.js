@@ -2,7 +2,11 @@ import './shim.js'
 import React from 'react'
 import {
   AsyncStorage,
-  Alert
+  Alert,
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  Text
 } from 'react-native'
 
 import SDKDConfig from '@sdkd/sdkd'
@@ -10,9 +14,11 @@ import SDKDWallet from '@sdkd/sdkd-wallet'
 
 import { createRootNavigator } from './Router'
 
+import theme from './config/Theme'
+
 const SDKD_APIKEY = ''
 SDKDConfig.init(SDKD_APIKEY)
-global.currentWallet = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
+global.currentWallet = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'mainnet'})
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)
@@ -49,10 +55,26 @@ export default class App extends React.Component {
 
     // If we haven't checked AsyncStorage yet, don't render anything
     if (signedIn === undefined) {
-      return null
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator
+            size='large'
+          />
+          <Text>Loading...</Text>
+        </View>
+      )
     }
 
     const Layout = createRootNavigator(signedIn)
     return <Layout />
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.sceneBackgroundColor
+  }
+})

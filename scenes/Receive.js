@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableOpacity,
+  Clipboard
 } from 'react-native'
 import theme from '../config/Theme'
 
@@ -34,17 +35,19 @@ export default class Receive extends React.Component {
     // }
     return (
       <View style={styles.container}>
-        <Text style={styles.yourAddress}>
-          Your address:
-        </Text>
-        <Text
-          style={styles.welcome}
-          adjustsFontSizeToFit
-          allowFontScaling
-          minimumFontScale={1}
-          numberOfLines={1}>
-          {global.currentWallet.getAddressString()}
-        </Text>
+        <TouchableOpacity onPress={() => Clipboard.setString(global.currentWallet.getAddressString())}>
+          <Text style={styles.yourAddress}>
+            Your address:
+          </Text>
+          <Text
+            style={styles.welcome}
+            adjustsFontSizeToFit
+            allowFontScaling
+            minimumFontScale={1}
+            numberOfLines={1}>
+            {global.currentWallet.getAddressString()}
+          </Text>
+        </TouchableOpacity>
         <View style={styles.qrCode}>
           {global.currentWallet.renderAddressQRCode()}
         </View>

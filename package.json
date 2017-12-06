@@ -36,6 +36,7 @@
     "react-native-tcp": "^3.3.0",
     "react-native-udp": "^2.3.0",
     "react-native-vector-icons": "^4.4.2",
+    "react-native-webbrowser-enhanced": "git+https://github.com/glitch003/react-native-webbrowser-enhanced.git",
     "react-navigation": "^1.0.0-beta.19",
     "readable-stream": "^1.0.33",
     "stream-browserify": "^1.0.0",
@@ -44,7 +45,8 @@
     "url": "^0.10.3",
     "utf8": "^2.1.2",
     "util": "^0.10.3",
-    "vm-browserify": "0.0.4"
+    "vm-browserify": "0.0.4",
+    "web3": "^1.0.0-beta.26"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",
