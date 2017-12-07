@@ -1,9 +1,12 @@
 package co.sdkd.amble;
 
 import android.app.Application;
+import android.os.Build;
+import android.webkit.WebView;
 
 import com.facebook.react.ReactApplication;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.facebook.react.common.build.ReactBuildConfig;
 import com.react.rnspinkit.RNSpinkitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.tradle.react.UdpSocketsModule;
@@ -60,6 +63,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    System.out.println("build version is " + Build.VERSION.SDK_INT + " and kitkat build is " + Build.VERSION_CODES.KITKAT);
+    System.out.println("ReactBuildConfig.debug is " + ReactBuildConfig.DEBUG);
     SoLoader.init(this, /* native exopackage */ false);
+    WebView.setWebContentsDebuggingEnabled(true);
   }
 }

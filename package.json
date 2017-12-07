@@ -37,6 +37,7 @@
     "react-native-udp": "^2.3.0",
     "react-native-vector-icons": "^4.4.2",
     "react-native-webbrowser-enhanced": "git+https://github.com/glitch003/react-native-webbrowser-enhanced.git",
+    "react-native-wkwebview-reborn": "^1.10.0",
     "react-navigation": "^1.0.0-beta.19",
     "readable-stream": "^1.0.33",
     "stream-browserify": "^1.0.0",
