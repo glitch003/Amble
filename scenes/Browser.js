@@ -28,6 +28,9 @@ export default class Browser extends Component {
     if (Platform.OS === 'ios') {
       // load the message handler up after the page loads
       this.state['injectedJs'] = 'window.web3_postMessageParent = window.webkit.messageHandlers.reactNative'
+    } else if (Platform.OS === 'android') {
+      // load the message handler up after the page loads
+      // this.state['injectedJs'] = 'eval(web3maker.evalMe())'
     }
   }
   componentWillMount () {
@@ -43,8 +46,21 @@ export default class Browser extends Component {
       // response = `${patchPostMessageJsCode}
       // ${response}
       // `
+      // window.chrome is a hack to make this work with cryptokitties
+      response = 'window.chrome = {webstore: true};\n' + response
       console.log('injecting web3Js response of length ' + response.length)
       this.setState({web3Js: response})
+
+      // this section turns on react debugging of the webview.  make sure to also allow mixed content in the android webview code.
+      // let reactDebugUrl = 'http://10.20.1.76:8097'
+      // fetch(reactDebugUrl)
+      // .then((debugResponse) => {
+      //   return debugResponse.text()
+      // })
+      // .then(debugResponse => {
+      //   debugResponse += 'ReactDevToolsBackend.connectToDevTools({host: "10.20.1.76"});'
+      //   this.setState({web3Js: debugResponse + '\n' + response})
+      // })
     })
     // let url = global.sdkdConfig.sdkdHost + '/web3mobile/lib/web3mobile.js'
     // console.log('getting url ' + url)
@@ -87,7 +103,9 @@ export default class Browser extends Component {
       )
     }
     // let url = 'https://tetzelcoin.com/#/confess'
-    let url = global.sdkdConfig.sdkdHost + '/web3test.html'
+    // let url = global.sdkdConfig.sdkdHost + '/web3test.html'
+    // let url = 'https://oasisdex.com'
+    let url = 'https://cryptokitties.co'
     return (
       <Webbrowser
         url={url}
@@ -130,13 +148,23 @@ export default class Browser extends Component {
     let payload = ''
     if (Platform.OS === 'ios') {
       console.log(e)
-      payload = JSON.parse(e.body)
-    } else {
+      try {
+        payload = JSON.parse(e.body)
+      } catch (e) {
+        console.log('Error parsing json onMessage on iOS')
+        return // couldn't parse json, exit.
+      }
+    } else if (Platform.OS === 'android') {
       if (!e.nativeEvent.data || !e.nativeEvent.data.length === 0) {
         return
       }
       console.log(e.nativeEvent.data)
-      payload = JSON.parse(e.nativeEvent.data)
+      try {
+        payload = JSON.parse(e.nativeEvent.data)
+      } catch (e) {
+        console.log('Error parsing json onMessage on android')
+        return // couldn't parse json, exit.
+      }
     }
     if (payload.method === 'getAccounts') {
       let callbackKey = payload.callbackKey

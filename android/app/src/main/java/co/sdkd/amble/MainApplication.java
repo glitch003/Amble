@@ -15,7 +15,6 @@ import com.peel.react.rnos.RNOSModule;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.oblador.keychain.KeychainPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -44,8 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNOSModule(),
             new RandomBytesPackage(),
             new KeychainPackage(),
-            new RCTCameraPackage(),
-            new ReactNativePushNotificationPackage()
+            new RCTCameraPackage()
       );
     }
 
@@ -63,8 +61,8 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    System.out.println("build version is " + Build.VERSION.SDK_INT + " and kitkat build is " + Build.VERSION_CODES.KITKAT);
-    System.out.println("ReactBuildConfig.debug is " + ReactBuildConfig.DEBUG);
+//    System.out.println("build version is " + Build.VERSION.SDK_INT + " and kitkat build is " + Build.VERSION_CODES.KITKAT);
+//    System.out.println("ReactBuildConfig.debug is " + ReactBuildConfig.DEBUG);
     SoLoader.init(this, /* native exopackage */ false);
     WebView.setWebContentsDebuggingEnabled(true);
   }
