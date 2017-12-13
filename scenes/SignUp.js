@@ -67,6 +67,17 @@ export default class SignUp extends React.Component {
           }}
           style={{marginTop: 20}}
         />
+        <Text style={styles.recoverText}>Advanced user?  Import an existing Ethereum private key.
+        </Text>
+        <AmbleButton
+          buttonProps={{
+            onPress: () => {
+              this.props.navigation.navigate('Import')
+            },
+            text: 'Import private key'
+          }}
+          style={{marginTop: 20}}
+        />
       </View>
     )
   }

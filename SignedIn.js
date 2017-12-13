@@ -13,6 +13,7 @@ import Transactions from './scenes/Transactions'
 import Receive from './scenes/Receive'
 import Send from './scenes/Send'
 import Browser from './scenes/Browser'
+import SignOut from './scenes/SignOut'
 
 import theme from './config/Theme'
 
@@ -224,7 +225,37 @@ const SignedIn = DrawerNavigator(
           })
         }
       )
+    },
+    SignOut: {
+      screen: StackNavigator(
+        {
+          SignOut: {
+            screen: SignOut
+          }
+        },
+        {
+          navigationOptions: ({ navigation }) => ({
+            initialRouteName: 'SignOut',
+            headerMode: 'screen',
+            headerTitle: 'Log out',
+            drawerLabel: 'Log out',
+            drawerIcon: ({ tintColor, focused }) => (
+              <Ionicons
+                name={focused ? 'ios-exit' : 'ios-exit-outline'}
+                size={20}
+                style={{ color: tintColor }}
+              />
+            ),
+            headerLeft: headerLeft(navigation),
+            headerStyle: theme.headerStyle,
+            headerTintColor: theme.headerTintColor
+          })
+        }
+      )
     }
+  },
+  {
+    initialRouteName: 'Browser'
   }
 )
 

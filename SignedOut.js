@@ -7,6 +7,7 @@ import { StackNavigator } from 'react-navigation'
 
 import SignUp from './scenes/SignUp'
 import Recover from './scenes/Recover'
+import Import from './scenes/Import'
 
 import theme from './config/Theme'
 
@@ -24,6 +25,14 @@ const SignedOut = StackNavigator(
       screen: Recover,
       navigationOptions: ({ navigation }) => ({
         headerTitle: 'Recover',
+        headerStyle: theme.headerStyle,
+        headerTintColor: theme.headerTintColor
+      })
+    },
+    Import: {
+      screen: Import,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: 'Import private key',
         headerStyle: theme.headerStyle,
         headerTintColor: theme.headerTintColor
       })

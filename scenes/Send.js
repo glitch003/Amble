@@ -12,6 +12,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 import theme from '../config/Theme'
 import AmbleButton from '../components/AmbleButton'
+import WithLabel from '../components/WithLabel'
 
 export default class Send extends React.Component {
   constructor () {
@@ -165,19 +166,6 @@ const styles = StyleSheet.create({
   qrCode: {
     marginTop: 20
   },
-  labelContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-    marginHorizontal: 10,
-    height: 40
-  },
-  label: {
-    width: 80,
-    alignItems: 'flex-end',
-    marginRight: 10,
-    paddingTop: 2,
-    height: 40
-  },
   textInput: {
     height: 26,
     borderWidth: 1,
@@ -189,16 +177,3 @@ const styles = StyleSheet.create({
     borderRadius: 6
   }
 })
-
-class WithLabel extends React.Component {
-  render () {
-    return (
-      <View style={[styles.labelContainer, this.props.style]}>
-        <View style={styles.label}>
-          <Text>{this.props.label}</Text>
-        </View>
-        {this.props.children}
-      </View>
-    )
-  }
-}
