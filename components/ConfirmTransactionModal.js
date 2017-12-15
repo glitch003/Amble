@@ -22,11 +22,11 @@ const DismissKeyboardView = DismissKeyboardHOC(View)
 export default class ConfirmTransactionModal extends React.Component {
   constructor (props) {
     super(props)
+    console.log('ConfirmTransactionModal created with tx with gas price: ' + JSON.stringify(props.tx))
     this.state = {
       sliderValue: 0,
-      maxTxFee: '0.0000023',
-      maxTotal: '0.000042',
-      tx: props.tx
+      tx: props.tx,
+      usdPrice: global.currentWallet.usdPrice ? global.currentWallet.usdPrice : 0
     }
   }
   componentWillReceiveProps (nextProps) {
@@ -34,16 +34,39 @@ export default class ConfirmTransactionModal extends React.Component {
       this.setState({ tx: nextProps.tx })
     }
   }
+  componentWillMount () {
+    global.currentWallet.setBalance()
+    .then(() => {
+      this.setState({ usdPrice: global.currentWallet.usdPrice })
+    })
+  }
   render () {
-    // format and calculate stuff for display
-    let txValue = this.state.tx.value.toString('hex')
-    txValue = global.currentWallet.formatBalance(txValue)
+    let eTx = new global.ethUtil.Tx(this.state.tx)
 
-    let maxTxFee = new BN(this.state.tx.gasLimit)
-      .imul(new BN(this.state.tx.gasPrice)).toString('hex')
+    // format and calculate stuff for display
+    let txValue = eTx.value.toString('hex')
+    txValue = global.currentWallet.formatBalance(txValue)
+    let txValueUsd = eTx.value.toString('hex')
+    txValueUsd = global.etherUnits.toFiat(new BN(txValueUsd, 16), 'wei', this.state.usdPrice)
+    txValueUsd = parseFloat(txValueUsd).toFixed(2)
+
+    let gasLimit = new BN(this.state.tx.gasLimit)
+    let gasPrice = new BN(this.state.tx.gasPrice)
+    let maxTxFee = gasLimit.mul(gasPrice)
+    // console.log('multilying gas limit ' + gasLimit + ' with gas price ' + gasPrice + ' and result is ' + maxTxFee)
+    // convert fee from gwei to wei
+    maxTxFee = new BN(global.etherUnits.toWei(maxTxFee, 'gwei'))
+    let maxTotal = maxTxFee.add(new BN(eTx.value))
+    maxTxFee = maxTxFee.toString('hex')
+    let maxTxFeeUsd = new BN(maxTxFee, 16)
+    maxTxFeeUsd = global.etherUnits.toFiat(maxTxFeeUsd, 'wei', this.state.usdPrice)
+    maxTxFeeUsd = parseFloat(maxTxFeeUsd).toFixed(2)
     maxTxFee = global.currentWallet.formatBalance(maxTxFee)
 
-    let maxTotal = this.state.tx.getUpfrontCost().toString('hex')
+    maxTotal = maxTotal.toString('hex')
+    let maxTotalUsd = maxTotal
+    maxTotalUsd = global.etherUnits.toFiat(new BN(maxTotalUsd, 16), 'wei', this.state.usdPrice)
+    maxTotalUsd = parseFloat(maxTotalUsd).toFixed(2)
     maxTotal = global.currentWallet.formatBalance(maxTotal)
 
     return (
@@ -73,7 +96,7 @@ export default class ConfirmTransactionModal extends React.Component {
                 numberOfLines={1}
                 style={{flex: 1}}
               >
-                {'0x' + this.state.tx.to.toString('hex')}
+                {'0x' + eTx.to.toString('hex')}
               </Text>
             </HorizontalLabel>
             <HorizontalLabel label='Amount'>
@@ -88,10 +111,13 @@ export default class ConfirmTransactionModal extends React.Component {
             </HorizontalLabel>
             <View style={{flexDirection: 'row'}}>
               <Text style={{flex: 1, textAlign: 'right'}}>
-                0.00 USD
+                {txValueUsd} USD
               </Text>
             </View>
-            <HorizontalLabel label='Gas Limit'>
+            <HorizontalLabel
+              label='Gas Limit'
+              labelStyle={{paddingTop: 4}}
+            >
               <TextInput
                 style={styles.textInput}
                 onChangeText={(gasLimit) => {
@@ -99,14 +125,18 @@ export default class ConfirmTransactionModal extends React.Component {
                   tx.gasLimit = gasLimit
                   this.setState({tx})
                 }}
-                value={this.state.tx.gasLimit.toString()}
+                value={this.state.tx.gasLimit}
                 autoCapitalize='none'
                 autoCorrect={false}
                 keyboardType='numeric'
                 underlineColorAndroid='transparent'
               />
+              <Text style={styles.rightLabel}>UNITS</Text>
             </HorizontalLabel>
-            <HorizontalLabel label='Gas Price'>
+            <HorizontalLabel
+              label='Gas Price'
+              labelStyle={{paddingTop: 4}}
+            >
               <TextInput
                 style={styles.textInput}
                 onChangeText={(gasPrice) => {
@@ -114,12 +144,13 @@ export default class ConfirmTransactionModal extends React.Component {
                   tx.gasPrice = gasPrice
                   this.setState({tx})
                 }}
-                value={this.state.tx.gasPrice.toString()}
+                value={this.state.tx.gasPrice}
                 autoCapitalize='none'
                 autoCorrect={false}
                 keyboardType='numeric'
                 underlineColorAndroid='transparent'
               />
+              <Text style={styles.rightLabel}>GWEI</Text>
             </HorizontalLabel>
             <HorizontalLabel label='Max Tx Fee'>
               <Text
@@ -133,7 +164,7 @@ export default class ConfirmTransactionModal extends React.Component {
             </HorizontalLabel>
             <View style={{flexDirection: 'row'}}>
               <Text style={{flex: 1, textAlign: 'right'}}>
-                0.00 USD
+                {maxTxFeeUsd} USD
               </Text>
             </View>
             <HorizontalLabel label='Max Total'>
@@ -148,12 +179,12 @@ export default class ConfirmTransactionModal extends React.Component {
             </HorizontalLabel>
             <View style={{flexDirection: 'row'}}>
               <Text style={{flex: 1, textAlign: 'right'}}>
-                0.00 USD
+                {maxTotalUsd} USD
               </Text>
             </View>
             <View style={{flexDirection: 'row', marginTop: 10}}>
               <Text style={{flex: 1, textAlign: 'right'}}>
-                Data Included: 132 bytes
+                Data Included: {eTx.raw[5].length} bytes
               </Text>
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'center', width: '100%', marginTop: 20}}>
@@ -161,7 +192,7 @@ export default class ConfirmTransactionModal extends React.Component {
                 textStyle={theme.buttonTextStyle}
                 width={150}
                 height={40}
-                onPress={this.props.onPressReject}
+                onPress={() => this.props.onPressReject(this.state.tx)}
                 backgroundColors={theme.buttonBackgroundColors}
                 gradientStart={{x: 0, y: 0}}
                 gradientEnd={{x: 1, y: 1}}
@@ -205,7 +236,7 @@ export default class ConfirmTransactionModal extends React.Component {
                 if (sliderValue === 1) {
                   // send the txn
                   console.log('slid all the way to the right')
-                  this.props.onPressSubmit()
+                  this.props.onPressSubmit(this.state.tx)
                 }
               }}
             />
@@ -243,6 +274,11 @@ const styles = StyleSheet.create({
     padding: 4,
     backgroundColor: 'white',
     borderRadius: 6,
+    textAlign: 'right'
+  },
+  rightLabel: {
+    paddingTop: 4,
+    width: 50,
     textAlign: 'right'
   }
 })

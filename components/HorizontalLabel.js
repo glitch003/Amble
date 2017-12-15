@@ -9,7 +9,7 @@ export default class HorizontalLabel extends React.Component {
   render () {
     return (
       <View style={[styles.labelContainer, this.props.style]}>
-        <View style={styles.label}>
+        <View style={[styles.label, this.props.labelStyle]}>
           <Text>{this.props.label}</Text>
         </View>
         {this.props.children}

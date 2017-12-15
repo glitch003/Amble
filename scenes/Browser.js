@@ -11,6 +11,8 @@ import theme from '../config/Theme'
 
 import ConfirmTransactionModal from '../components/ConfirmTransactionModal'
 
+import BN from 'bn.js'
+
 import Webbrowser from 'react-native-webbrowser-enhanced'
 
 export default class Browser extends Component {
@@ -27,7 +29,7 @@ export default class Browser extends Component {
     this.state = {
       web3Js: null,
       injectedJs: null,
-      modalVisible: true,
+      modalVisible: false,
       txQueue: []
     }
     if (Platform.OS === 'ios') {
@@ -37,31 +39,17 @@ export default class Browser extends Component {
       // load the message handler up after the page loads
       // this.state['injectedJs'] = 'eval(web3maker.evalMe())'
     }
-    let txPayload = {
-      tx: {
-        to: '0xdbd360F30097fB6d938dcc8B7b62854B36160B45',
-        value: global.ethFuncs.decimalToHex(100000000000000),
-        data: '0xc6888fa10000000000000000000000000000000000000000000000000000000000000003',
-        gasLimit: global.globalFuncs.defaultTxGasLimit.toString(),
-        gasPrice: global.currentWallet.defaultGasPrice
-      }
-    }
-    this.addTxToQueue(txPayload)
-  }
-  addTxToQueue (txPayload) {
-    console.log('estimating gas to add tx to queue: ' + JSON.stringify(txPayload))
-    global.ethFuncs.estimateGas(txPayload.tx, (result) => {
-      console.log('gas estimate result: ' + JSON.stringify(result))
-      if (result.error) {
-        throw new Error(result.error)
-      }
-
-      txPayload.tx.gasLimit = result.data
-
-      this.setState(prevState => ({
-        txQueue: [...prevState.txQueue, txPayload]
-      }))
-    })
+    // tx payload for testing
+    // let txPayload = {
+    //   tx: {
+    //     'from': '0xdbd360f30097fb6d938dcc8b7b62854b36160b45',
+    //     'value': '0x1c6bf526340000',
+    //     'gasPrice': '0x5d21dba00',
+    //     'to': '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+    //     'data': '0xf7d8c883000000000000000000000000000000000000000000000000000000000001ce4a0000000000000000000000000000000000000000000000000000000000042190'
+    //   }
+    // }
+    // this.addTxToQueue(txPayload)
   }
   componentWillMount () {
     // get web3 script to inject
@@ -77,10 +65,12 @@ export default class Browser extends Component {
       // ${response}
       // `
       // window.chrome is a hack to make this work with cryptokitties
+      let web3Mobile = {
+        selectedAddress: global.currentWallet.getAddressString(),
+        rpcUrl: global.sdkdConfig.moduleConfig.wallet.ethNodeHost
+      }
       response = `window.chrome = {webstore: true};
-      window.web3Mobile = {
-        selectedAddress: '${global.currentWallet.getAddressString()}'
-      };
+      window.web3Mobile = ${JSON.stringify(web3Mobile)};
       ${response}
       `
       console.log('injecting web3Js response of length ' + response.length)
@@ -99,44 +89,39 @@ export default class Browser extends Component {
     })
   }
   render () {
-    // if (this.state.web3Js === null) {
-    //   return (
-    //     <View style={styles.container}>
-    //       <ActivityIndicator
-    //         size='large'
-    //         styles={styles.activityIndicator}
-    //       />
-    //     </View>
-    //   )
-    // }
+    if (this.state.web3Js === null) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator
+            size='large'
+            styles={styles.activityIndicator}
+          />
+        </View>
+      )
+    }
     // let url = 'https://tetzelcoin.com/#/confess'
     // let url = global.sdkdConfig.sdkdStaticHost + '/web3test.html'
     // let url = 'https://oasisdex.com'
     let url = 'https://cryptokitties.co'
     // let url = 'https://myetherwallet.com/signmsg.html'
+    // let url = 'https://faucet.metamask.io/'
     return [
-      // (<Webbrowser
-      //   key='webbrowser'
-      //   url={url}
-      //   hideHomeButton={false}
-      //   hideToolbar={false}
-      //   hideAddressBar={false}
-      //   hideStatusBar={false}
-      //   foregroundColor={theme.headerTintColor}
-      //   backgroundColor={theme.headerStyle.backgroundColor}
-      //   webviewProps={{
-      //     onMessage: this.webviewMessage.bind(this),
-      //     injectedJavaScript: this.state.injectedJs,
-      //     injectJavaScriptBeforeLoad: this.state.web3Js
-      //   }}
-      //   ref={browser => { this.browser = browser }}
-      // />),
-      (<View key='test' style={styles.container}>
-        <ActivityIndicator
-          size='large'
-          styles={styles.activityIndicator}
-        />
-      </View>),
+      (<Webbrowser
+        key='webbrowser'
+        url={url}
+        hideHomeButton={false}
+        hideToolbar={true}
+        hideAddressBar={false}
+        hideStatusBar={true}
+        foregroundColor={theme.headerTintColor}
+        backgroundColor={theme.headerStyle.backgroundColor}
+        webviewProps={{
+          onMessage: this.webviewMessage.bind(this),
+          injectedJavaScript: this.state.injectedJs,
+          injectJavaScriptBeforeLoad: this.state.web3Js
+        }}
+        ref={browser => { this.browser = browser }}
+      />),
       (this.renderConfirmTransactionModal())
     ]
   }
@@ -146,32 +131,63 @@ export default class Browser extends Component {
       return null
     }
     let txPayload = this.state.txQueue[0]
-    console.log('creating eTx with tx: ' + JSON.stringify(txPayload.tx))
-    let eTx = new global.ethUtil.Tx(txPayload.tx)
-    console.log('tx: ' + JSON.stringify(eTx.to))
     return (
       <ConfirmTransactionModal
         key='modal'
         isVisible={this.state.modalVisible}
-        tx={eTx}
+        tx={txPayload.tx}
         fromAddress={global.currentWallet.getAddressString()}
         onPressReject={this.submitOrRejectTxn.bind(this, false, txPayload)}
         onPressSubmit={this.submitOrRejectTxn.bind(this, true, txPayload)}
       />
     )
   }
+  addTxToQueue (txPayload) {
+    console.log('possibly estimating gas to add tx to queue: ' + JSON.stringify(txPayload))
+    txPayload.tx.gasPrice = global.currentWallet.defaultGasPrice
+    if (txPayload.tx.gas) {
+      // gas limit is already specified, do not estimate
+      txPayload.tx.gasLimit = txPayload.tx.gas
+      this.setState(prevState => ({
+        txQueue: [...prevState.txQueue, txPayload],
+        modalVisible: true
+      }))
+      return
+    }
+    global.ethFuncs.estimateGas(txPayload.tx, (result) => {
+      console.log('gas estimate result: ' + JSON.stringify(result))
+      if (result.error) {
+        throw new Error(result.error)
+      }
 
-  submitOrRejectTxn (submitTxn, payload) {
-    console.log('user submitted or rejected txn.  submitTxn: ' + submitTxn.toString() + ' and payload: ' + JSON.stringify(payload))
+      txPayload.tx.gasLimit = new BN(result.data)
+      // add 100k more gas if the txn has data
+      if (txPayload.tx.data && txPayload.tx.data.length !== 0 && txPayload.tx.data !== '0x' && txPayload.tx.data !== '0x0' && txPayload.tx.data !== '0') {
+        txPayload.tx.gasLimit = txPayload.tx.gasLimit.add(new BN(100000))
+      }
+      txPayload.tx.gasLimit = txPayload.tx.gasLimit.toString()
+
+      this.setState(prevState => ({
+        txQueue: [...prevState.txQueue, txPayload],
+        modalVisible: true
+      }))
+    })
+  }
+  submitOrRejectTxn (submitTxn, payload, modifiedTx) {
+    console.log('user submitted or rejected txn.  submitTxn: ' + submitTxn.toString() + ' and payload: ' + JSON.stringify(payload) + ' and modifiedTx: ' + JSON.stringify(modifiedTx))
     this.setState({
       modalVisible: false,
       txQueue: this.state.txQueue.slice(1)
     })
     let callbackKey = payload.callbackKey
+    let gasPrice = '0x' + global.ethFuncs.decimalToHex(modifiedTx.gasPrice)
+    let gasLimit = '0x' + global.ethFuncs.decimalToHex(modifiedTx.gasLimit)
     let cmd = `
       console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, ${submitTxn.toString()});
-      delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].data.tx.gas = '${gasLimit}';
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].data.tx.gasPrice = '${gasPrice}';
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, ${submitTxn.toString()});
+      // delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
     `
     this.evalJs(cmd)
   }
@@ -212,7 +228,7 @@ export default class Browser extends Component {
       let callbackKey = payload.callbackKey
       let cmd = `
       console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, ['${global.currentWallet.getAddressString()}']);
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, ['${global.currentWallet.getAddressString()}']);
       delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
       `
       this.evalJs(cmd)
@@ -223,7 +239,7 @@ export default class Browser extends Component {
       let signedTx = global.currentWallet.signTx(tx)
       let cmd = `
       console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, '${signedTx}');
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, '${signedTx}');
       delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
       `
       this.evalJs(cmd)
@@ -236,7 +252,7 @@ export default class Browser extends Component {
       let signedMsg = global.currentWallet.signMsg(msg.data)
       let cmd = `
       console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, '${signedMsg}');
+      window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, '${signedMsg}');
       delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
       `
       this.evalJs(cmd)
@@ -255,7 +271,7 @@ export default class Browser extends Component {
             onPress: () => {
               let cmd = `
                 console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-                window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, false);
+                window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, false);
                 delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
               `
               this.evalJs(cmd)
@@ -267,7 +283,7 @@ export default class Browser extends Component {
             onPress: () => {
               let cmd = `
                 console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
-                window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'](null, true);
+                window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}'].callback(null, true);
                 delete window.web3Mobile._bridge_callbacks['${payload.method}']['${callbackKey}']
               `
               this.evalJs(cmd)
