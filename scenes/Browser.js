@@ -39,17 +39,6 @@ export default class Browser extends Component {
       // load the message handler up after the page loads
       // this.state['injectedJs'] = 'eval(web3maker.evalMe())'
     }
-    // tx payload for testing
-    // let txPayload = {
-    //   tx: {
-    //     'from': '0xdbd360f30097fb6d938dcc8b7b62854b36160b45',
-    //     'value': '0x1c6bf526340000',
-    //     'gasPrice': '0x5d21dba00',
-    //     'to': '0x06012c8cf97bead5deae237070f9587f8e7a266d',
-    //     'data': '0xf7d8c883000000000000000000000000000000000000000000000000000000000001ce4a0000000000000000000000000000000000000000000000000000000000042190'
-    //   }
-    // }
-    // this.addTxToQueue(txPayload)
   }
   componentWillMount () {
     // get web3 script to inject
@@ -87,6 +76,22 @@ export default class Browser extends Component {
       //   this.setState({web3Js: debugResponse + '\n' + response})
       // })
     })
+  }
+  componentDidMount () {
+    // tx payload for testing
+    // let txPayload = {
+    //   tx: {
+    //     'from': '0xdbd360f30097fb6d938dcc8b7b62854b36160b45',
+    //     'value': '0x1c6bf526340000',
+    //     'gasPrice': '0x5d21dba00',
+    //     'to': '0x06012c8cf97bead5deae237070f9587f8e7a266d',
+    //     'data': '0xf7d8c883000000000000000000000000000000000000000000000000000000000001ce4a0000000000000000000000000000000000000000000000000000000000042190'
+    //   }
+    // }
+    // let txPayload = {
+    //   tx: {"from":"0xdbd360f30097fb6d938dcc8b7b62854b36160b45","value":"0x1c6bf526340000","gasPrice":"0x3c","to":"0x06012c8cf97bead5deae237070f9587f8e7a266d","data":"0xf7d8c883000000000000000000000000000000000000000000000000000000000002f09d0000000000000000000000000000000000000000000000000000000000051f40","gas":"0x1dc38"}
+    // }
+    // this.addTxToQueue(txPayload)
   }
   render () {
     if (this.state.web3Js === null) {
@@ -147,7 +152,12 @@ export default class Browser extends Component {
     txPayload.tx.gasPrice = global.currentWallet.defaultGasPrice
     if (txPayload.tx.gas) {
       // gas limit is already specified, do not estimate
-      txPayload.tx.gasLimit = txPayload.tx.gas
+      if (txPayload.tx.gas.indexOf('0x') === -1){
+        txPayload.tx.gasLimit = txPayload.tx.gas
+      } else {
+        // convert from hex
+        txPayload.tx.gasLimit = global.ethFuncs.hexToDecimal(txPayload.tx.gas)
+      }
       this.setState(prevState => ({
         txQueue: [...prevState.txQueue, txPayload],
         modalVisible: true
@@ -180,7 +190,8 @@ export default class Browser extends Component {
       txQueue: this.state.txQueue.slice(1)
     })
     let callbackKey = payload.callbackKey
-    let gasPrice = '0x' + global.ethFuncs.decimalToHex(modifiedTx.gasPrice)
+    let gasPrice = global.etherUnits.toWei(modifiedTx.gasPrice, 'gwei') // convert from gwei to wei
+    gasPrice = '0x' + global.ethFuncs.decimalToHex(gasPrice) // convert to hex
     let gasLimit = '0x' + global.ethFuncs.decimalToHex(modifiedTx.gasLimit)
     let cmd = `
       console.log('React native is calling window.web3Mobile._bridge_callbacks for ${payload.method} and key ${callbackKey}');
