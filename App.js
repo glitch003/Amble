@@ -18,7 +18,7 @@ import theme from './config/Theme'
 
 const SDKD_APIKEY = ''
 SDKDConfig.init(SDKD_APIKEY)
-global.currentWallet = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'mainnet'})
+global.currentWallet = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)

@@ -22,7 +22,7 @@ const DismissKeyboardView = DismissKeyboardHOC(View)
 export default class ConfirmTransactionModal extends React.Component {
   constructor (props) {
     super(props)
-    console.log('ConfirmTransactionModal created with tx with gas price: ' + JSON.stringify(props.tx))
+    console.log('ConfirmTransactionModal created with tx: ' + JSON.stringify(props.tx))
     this.state = {
       sliderValue: 0,
       tx: props.tx,
@@ -50,10 +50,10 @@ export default class ConfirmTransactionModal extends React.Component {
     txValueUsd = global.etherUnits.toFiat(new BN(txValueUsd, 16), 'wei', this.state.usdPrice)
     txValueUsd = parseFloat(txValueUsd).toFixed(2)
 
-    let gasLimit = new BN(this.state.tx.gasLimit)
+    let gas = new BN(this.state.tx.gas)
     let gasPrice = new BN(this.state.tx.gasPrice)
-    let maxTxFee = gasLimit.mul(gasPrice)
-    // console.log('multilying gas limit ' + gasLimit + ' with gas price ' + gasPrice + ' and result is ' + maxTxFee)
+    let maxTxFee = gas.mul(gasPrice)
+    // console.log('multilying gas limit ' + gas + ' with gas price ' + gasPrice + ' and result is ' + maxTxFee)
     // convert fee from gwei to wei
     maxTxFee = new BN(global.etherUnits.toWei(maxTxFee, 'gwei'))
     let maxTotal = maxTxFee.add(new BN(eTx.value))
@@ -120,12 +120,12 @@ export default class ConfirmTransactionModal extends React.Component {
             >
               <TextInput
                 style={styles.textInput}
-                onChangeText={(gasLimit) => {
+                onChangeText={(gas) => {
                   let tx = this.state.tx
-                  tx.gasLimit = gasLimit
+                  tx.gas = gas
                   this.setState({tx})
                 }}
-                value={this.state.tx.gasLimit}
+                value={this.state.tx.gas}
                 autoCapitalize='none'
                 autoCorrect={false}
                 keyboardType='numeric'
