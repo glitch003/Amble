@@ -14,7 +14,7 @@ export default class Home extends React.Component {
   constructor () {
     super()
     this.state = {
-      balance: 0,
+      balance: '0 ETH',
       scanning: false,
       refreshing: false
       // recovering: true
@@ -59,7 +59,7 @@ export default class Home extends React.Component {
         }
       >
         <Text style={styles.balance}>
-          Balance: {global.currentWallet.etherUnits.toEther(this.state.balance, 'wei')} ETH
+          Balance: {this.state.balance}
         </Text>
         <AmbleButton
           buttonProps={{
@@ -94,9 +94,10 @@ export default class Home extends React.Component {
     return new Promise((resolve, reject) => {
       global.currentWallet.getBalance()
       .then(balance => {
-        console.log('[Amble]: setting balance to ' + balance)
-        this.setState({balance})
-        resolve(balance)
+        let formattedBalance = global.currentWallet.formattedBalance()
+        console.log('[Amble]: setting balance to ' + formattedBalance)
+        this.setState({balance: formattedBalance})
+        resolve()
       })
       .catch(err => reject(err))
     })

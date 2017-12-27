@@ -274,7 +274,7 @@ const SignedIn = DrawerNavigator(
     }
   },
   {
-    initialRouteName: 'PicEncryptInstructions'
+    initialRouteName: 'Home'
   }
 )
 
