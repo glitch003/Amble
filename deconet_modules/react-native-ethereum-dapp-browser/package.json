@@ -1,0 +1,11 @@
+{
+  "name": "react-native-ethereum-dapp-browser",
+  "main": "Browser.js",
+  "version": "0.0.1",
+  "license": "MS-RSL",
+  "dependencies": {
+    "@sdkd/sdkd": "0.0.9"
+  },
+  "devDependencies": {},
+  "peerDependencies": {}
+}

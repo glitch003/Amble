@@ -7,25 +7,17 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-import theme from '../config/Theme'
+// import theme from '../config/Theme'
 
-import ConfirmTransactionModal from '../components/ConfirmTransactionModal'
+import ConfirmTransactionModal from './components/ConfirmTransactionModal'
 
 import BN from 'bn.js'
 
 import Webbrowser from 'react-native-webbrowser-enhanced'
 
 export default class Browser extends Component {
-  constructor () {
-    super()
-    // this.state = {
-    //   injectedJs: `${patchPostMessageJsCode}
-    //   var s = document.createElement("script");
-    //   s.type = "text/javascript";
-    //   s.src = "${global.sdkdConfig.sdkdHost}/web3mobile/lib/web3.js";
-    //   document.head.insertBefore(s, document.head.firstChild);
-    //   `
-    // }
+  constructor (props) {
+    super(props)
     this.state = {
       web3Js: null,
       injectedJs: null,
@@ -111,8 +103,8 @@ export default class Browser extends Component {
     // let url = global.sdkdConfig.sdkdStaticHost + '/web3mobile-pentest.htm'
     // let url = 'https://oasisdex.com'
     // let url = 'https://cryptokitties.co'
-    let url = 'https://myetherwallet.com/signmsg.html'
-    // let url = 'https://faucet.metamask.io/'
+    // let url = 'https://myetherwallet.com/signmsg.html'
+    let url = 'https://faucet.metamask.io/'
     return [
       (<Webbrowser
         key='webbrowser'
@@ -121,8 +113,8 @@ export default class Browser extends Component {
         hideToolbar={true}
         hideAddressBar={false}
         hideStatusBar={true}
-        foregroundColor={theme.headerTintColor}
-        backgroundColor={theme.headerStyle.backgroundColor}
+        foregroundColor={'white'/*theme.headerTintColor*/}
+        backgroundColor={'black'/*theme.headerStyle.backgroundColor*/}
         webviewProps={{
           onMessage: this.webviewMessage.bind(this),
           injectedJavaScript: this.state.injectedJs,
@@ -333,7 +325,7 @@ export default class Browser extends Component {
     let callbackKey = payload.callbackKey
     let msg = payload.msg
     let propertiesToCompare = [
-      'from', 'msg'
+      'from', 'data'
     ]
     let msgIndex = this.checkArrayForMatch(this.state.approvedUnsignedMsgQueue, msg, propertiesToCompare)
     if (msgIndex === -1) {
@@ -426,6 +418,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.sceneBackgroundColor
+    backgroundColor: 'white' //theme.sceneBackgroundColor
   }
 })

@@ -9,10 +9,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Home from './scenes/Home'
 import Notifications from './scenes/Notifications'
 import PicEncrypt from './scenes/PicEncrypt'
+import PicEncryptInstructions from './scenes/PicEncryptInstructions'
 import Transactions from './scenes/Transactions'
 import Receive from './scenes/Receive'
 import Send from './scenes/Send'
-import Browser from './scenes/Browser'
+import Browser from 'react-native-ethereum-dapp-browser'
 import SignOut from './scenes/SignOut'
 
 import theme from './config/Theme'
@@ -145,18 +146,37 @@ const SignedIn = DrawerNavigator(
         }
       )
     },
-    PicEncrypt: {
+    PicEncryptInstructions: {
       screen: StackNavigator(
         {
+          PicEncryptInstructions: {
+            screen: PicEncryptInstructions,
+            navigationOptions: ({ navigation }) => ({
+              headerTitle: 'Encrypt a photo',
+              drawerLabel: 'Encrypt a photo',
+              drawerIcon: ({ tintColor, focused }) => (
+                <Ionicons
+                  name={focused ? 'ios-camera' : 'ios-camera-outline'}
+                  size={20}
+                  style={{ color: tintColor }}
+                />
+              ),
+              headerLeft: headerLeft(navigation),
+            })
+          },
           PicEncrypt: {
-            screen: PicEncrypt
+            screen: PicEncrypt,
+            navigationOptions: ({ navigation }) => ({
+              headerMode: 'screen',
+              headerTitle: 'Encrypt a photo',
+              headerLeft: backButtonHeaderLeft(navigation)
+            })
           }
         },
         {
           navigationOptions: ({ navigation }) => ({
-            initialRouteName: 'PicEncrypt',
+            initialRouteName: 'PicEncryptInstructions',
             headerMode: 'screen',
-            headerTitle: 'Encrypt a photo',
             drawerLabel: 'Encrypt a photo',
             drawerIcon: ({ tintColor, focused }) => (
               <Ionicons
@@ -165,7 +185,6 @@ const SignedIn = DrawerNavigator(
                 style={{ color: tintColor }}
               />
             ),
-            headerLeft: headerLeft(navigation),
             headerStyle: theme.headerStyle,
             headerTintColor: theme.headerTintColor
           })
@@ -255,7 +274,7 @@ const SignedIn = DrawerNavigator(
     }
   },
   {
-    initialRouteName: 'Browser'
+    initialRouteName: 'PicEncryptInstructions'
   }
 )
 

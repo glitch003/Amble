@@ -27,6 +27,7 @@
     "react-native-button-component": "^0.1.25",
     "react-native-camera": "^0.12.0",
     "react-native-crypto": "^2.1.1",
+    "react-native-ethereum-dapp-browser": "file:deconet_modules/react-native-ethereum-dapp-browser",
     "react-native-http": "github:tradle/react-native-http#834492d",
     "react-native-keychain": "^1.2.1",
     "react-native-level-fs": "^3.0.0",

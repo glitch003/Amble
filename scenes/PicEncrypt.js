@@ -2,46 +2,107 @@ import React, { Component } from 'react'
 import {
   Platform,
   StyleSheet,
-  Text,
+  ActivityIndicator,
   View,
-  TouchableHighlight,
-  TextInput
+  Alert,
+  ImageBackground
 } from 'react-native'
 import Camera from 'react-native-camera'
-import crypto from 'react-native-crypto'
 import SDKDAwsSes from '@sdkd/sdkd-aws-ses'
 import AES from 'crypto-js/aes'
+import AmbleButton from '../components/AmbleButton'
+import theme from '../config/Theme'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: theme.sceneBackgroundColor
+  },
+  preview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  }
+})
 
 export default class PicEncrypt extends React.Component {
   constructor () {
     super()
     this.state = {
-      password: ''
+      password: '',
+      previewing: false,
+      imgData: '',
+      loading: false
     }
   }
-  componentWillMount () {
-
+  componentDidMount () {
+    if (this.props.navigation.state.params && this.props.navigation.state.params.password) {
+      this.setState({
+        password: this.props.navigation.state.params.password
+      })
+    }
   }
   render () {
     return (
       <View style={styles.container}>
+        {this.renderCameraOrPreviewOrLoading()}
+      </View>
+    )
+  }
+
+  renderCameraOrPreviewOrLoading () {
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          size='large'
+        />
+      )
+    } else if (this.state.previewing) {
+      const base64Img = 'data:image/jpeg;base64,' + this.state.imgData
+      return (
+        <ImageBackground
+          style={styles.preview}
+          source={{uri: base64Img}}
+        >
+          <AmbleButton
+            style={{}}
+            buttonProps={{
+              onPress: () => this.setState({previewing: false, imgData: ''}),
+              text: 'Retake'
+            }}
+          />
+          <AmbleButton
+            style={{}}
+            buttonProps={{
+              onPress: () => this.encryptAndSend(this.state.imgData),
+              text: 'Keep'
+            }}
+          />
+        </ImageBackground>
+      )
+    } else {
+      return (
         <Camera
           ref={(cam) => {
             this.camera = cam
           }}
+          fixOrientation={true}
           captureTarget={Camera.constants.CaptureTarget.memory}
           captureQuality={Camera.constants.CaptureQuality.high}
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}>
-          <TextInput
-            style={{height: 40, width: 200, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white'}}
-            onChangeText={(password) => this.setState({password})}
-            value={this.state.password}
+          <AmbleButton
+            style={styles.capture}
+            buttonProps={{
+              onPress: this.takePicture.bind(this),
+              text: 'Capture'
+            }}
           />
-          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
         </Camera>
-      </View>
-    )
+      )
+    }
   }
 
   takePicture () {
@@ -51,34 +112,23 @@ export default class PicEncrypt extends React.Component {
       .then((data) => {
         // console.log(data)
         // data.data has base64 image
-        let img = data.data
-        console.log('base64 pic length: ' + img.length)
-        let encrypted = AES.encrypt(img, this.state.password).toString()
-        console.log('encrypted length: ' + encrypted.length)
-        let attachment = 'data:text/html;base64,' + Buffer.from(this.getDecryptionHtml(encrypted)).toString('base64')
-        console.log('attachment length: ' + attachment.length)
-        // email away
-        this.sendEmail(global.currentWallet.email, 'Your encrypted photo is attached', 'Open the attachment below in a browser like Chrome to decrypt your photo', [attachment])
+        const imgData = data.data
+        this.setState({imgData: imgData, previewing: true})
       })
       .catch(err => console.error(err))
   }
 
-  // encryptBuffer (buffer) {
-  //   const algorithm = 'aes-256-cbc'
-  //   const password = 'muffins123'
-  //   const key = crypto.pbkdf2Sync(password, 'salt', 1000, 32, 'sha512')
-  //   console.log('derived key')
-  //   const iv = window.crypto.getRandomValues(new Uint8Array(16))
-  //   var cipher = crypto.createCipheriv(algorithm, key, iv)
-  //   var crypted = Buffer.concat([cipher.update(buffer), cipher.final()])
-  //   return {
-  //     data: crypted.toString('base64'),
-  //     iv: iv,
-  //     algorithm: algorithm,
-  //     key: key.toString('hex'),
-  //     password: password
-  //   }
-  // }
+  encryptAndSend (img) {
+    // show loading spinner
+    this.setState({loading: true})
+    console.log('base64 pic length: ' + img.length)
+    let encrypted = AES.encrypt(img, this.state.password).toString()
+    console.log('encrypted length: ' + encrypted.length)
+    let attachment = 'data:text/html;base64,' + Buffer.from(this.getDecryptionHtml(encrypted)).toString('base64')
+    console.log('attachment length: ' + attachment.length)
+    // email away
+    this.sendEmail(global.currentWallet.email, 'Your encrypted photo is attached', 'Open the attachment below in a browser like Chrome to decrypt your photo', [attachment])
+  }
 
   async sendEmail (to, subject, body, attachments) {
     // get aws key and token and stuff
@@ -95,6 +145,8 @@ export default class PicEncrypt extends React.Component {
     sender.sendMessage(to, 'recovery@sdkd.co', subject, body, attachments)
     .then(response => {
       console.log('email sent with response: ' + JSON.stringify(response))
+      this.setState({loading: false, previewing: false})
+      Alert.alert('Photo sent!  Check your email.')
     })
   }
 
@@ -302,22 +354,3 @@ export default class PicEncrypt extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40
-  }
-})
