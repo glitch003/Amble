@@ -53,11 +53,15 @@
     "babel-jest": "21.2.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
+    "mock-async-storage": "^2.0.2",
     "react-test-renderer": "16.0.0",
     "rn-nodeify": "github:mvayngrib/rn-nodeify"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@sdkd|react-native-keychain|react-native-qrcode|react-navigation)"
+    ]
   },
   "react-native": {
     "zlib": "browserify-zlib",
