@@ -1,9 +1,6 @@
 import React from 'react'
 import {
   StyleSheet,
-  Text,
-  View,
-  TextInput,
   AsyncStorage,
   Alert
 } from 'react-native'

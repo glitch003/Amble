@@ -1,0 +1,505 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`receive screen renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <View
+    accessibilityComponentType={undefined}
+    accessibilityLabel={undefined}
+    accessibilityTraits={undefined}
+    accessible={true}
+    collapsable={undefined}
+    hitSlop={undefined}
+    isTVSelectable={true}
+    nativeID={undefined}
+    onLayout={undefined}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+    testID={undefined}
+    tvParallaxProperties={undefined}
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "fontSize": 15,
+          "marginBottom": 10,
+          "marginTop": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      Your address:
+    </Text>
+    <Text
+      accessible={true}
+      adjustsFontSizeToFit={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      minimumFontScale={1}
+      numberOfLines={1}
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
+      12345
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "marginTop": 20,
+      }
+    }
+  >
+    <View>
+      <View
+        style={
+          Object {
+            "height": 200,
+            "width": 200,
+          }
+        }
+      >
+        <WebView
+          automaticallyAdjustContentInsets={false}
+          contentInset={
+            Object {
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "top": 0,
+            }
+          }
+          javaScriptEnabled={true}
+          opaque={false}
+          scalesPageToFit={false}
+          scrollEnabled={false}
+          source={
+            Object {
+              "html": "<style>*{margin:0;padding:0;}canvas{transform:translateZ(0);}</style><canvas></canvas><script>var canvas = document.querySelector('canvas');(function renderCanvas(canvas){
+var ctx=canvas.getContext('2d');
+var size=this.size;
+var fgColor=this.fgColor;
+var bgColor=this.bgColor;
+canvas.width=size;
+canvas.height=size;
+canvas.style.left=(window.innerWidth-size)/2+'px';
+if(window.innerHeight>size)canvas.style.top=(window.innerHeight-size)/2+'px';
+ctx.fillRect(0,0,size,size);
+var cells=this.cells;
+var cellWidth=this.size/cells.length;
+var cellHeight=this.size/cells.length;
+var nRoundedWidth=Math.round(cellWidth);
+var nRoundedHeight=Math.round(cellHeight);
+cells.forEach(function(row,rowIndex){
+row.forEach(function(column,columnIndex){
+var nLeft=columnIndex*cellWidth;
+var nTop=rowIndex*cellHeight;
+ctx.fillStyle=ctx.strokeStyle=column?bgColor:fgColor;
+ctx.lineWidth=1;
+ctx.fillRect(nLeft,nTop,cellWidth,cellHeight);
+ctx.strokeRect(
+Math.floor(nLeft)+0.5,
+Math.floor(nTop)+0.5,
+nRoundedWidth,
+nRoundedHeight);
+
+ctx.strokeRect(
+Math.ceil(nLeft)-0.5,
+Math.ceil(nTop)-0.5,
+nRoundedWidth,
+nRoundedHeight);
+
+});
+});
+}).call({\\"size\\":200,\\"value\\":\\"12345\\",\\"bgColor\\":\\"black\\",\\"fgColor\\":\\"white\\",\\"cells\\":[[true,true,true,true,true,true,true,false,false,false,true,false,true,false,true,true,true,true,true,true,true],[true,false,false,false,false,false,true,false,true,true,false,true,true,false,true,false,false,false,false,false,true],[true,false,true,true,true,false,true,false,false,true,false,true,true,false,true,false,true,true,true,false,true],[true,false,true,true,true,false,true,false,false,true,false,false,true,false,true,false,true,true,true,false,true],[true,false,true,true,true,false,true,false,false,false,false,false,true,false,true,false,true,true,true,false,true],[true,false,false,false,false,false,true,false,true,true,true,true,false,false,true,false,false,false,false,false,true],[true,true,true,true,true,true,true,false,true,false,true,false,true,false,true,true,true,true,true,true,true],[false,false,false,false,false,false,false,false,true,false,false,true,false,false,false,false,false,false,false,false,false],[false,false,false,false,true,true,true,true,false,false,false,false,false,false,true,true,false,false,false,true,false],[false,false,false,true,true,true,false,true,false,false,true,true,true,true,true,true,false,false,true,false,false],[true,false,false,true,true,true,true,true,true,true,false,false,true,true,false,true,true,true,true,false,false],[false,true,true,false,true,true,false,true,false,true,false,false,true,true,false,false,true,true,false,true,false],[false,false,true,false,false,false,true,true,true,false,false,true,true,true,false,false,false,true,false,true,true],[false,false,false,false,false,false,false,false,true,true,true,true,false,false,true,false,false,false,true,false,false],[true,true,true,true,true,true,true,false,true,true,false,true,true,false,false,false,false,false,true,false,false],[true,false,false,false,false,false,true,false,true,true,true,false,true,false,true,true,false,true,false,true,false],[true,false,true,true,true,false,true,false,true,true,true,true,true,true,false,true,true,true,false,false,true],[true,false,true,true,true,false,true,false,false,true,false,false,true,false,false,false,false,true,true,true,true],[true,false,true,true,true,false,true,false,false,false,true,true,true,false,false,true,true,true,false,false,false],[true,false,false,false,false,false,true,false,false,false,true,true,false,false,true,false,true,true,false,false,false],[true,true,true,true,true,true,true,false,false,true,false,false,false,true,false,true,false,true,false,false,true]]}, canvas);</script>",
+            }
+          }
+          style={
+            Object {
+              "height": 200,
+              "width": 200,
+            }
+          }
+          underlayColor="transparent"
+        />
+      </View>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`send screen renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <View
+    style={
+      Array [
+        Object {
+          "flexDirection": "row",
+          "height": 40,
+          "marginHorizontal": 10,
+          "marginVertical": 10,
+        },
+        Object {
+          "marginTop": 30,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "flex-end",
+          "height": 40,
+          "marginRight": 10,
+          "paddingTop": 2,
+          "width": 80,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        To
+      </Text>
+    </View>
+    <TextInput
+      allowFontScaling={true}
+      autoCapitalize="none"
+      autoCorrect={false}
+      multiline={true}
+      onChangeText={[Function]}
+      style={
+        Array [
+          Object {
+            "backgroundColor": "white",
+            "borderColor": "gray",
+            "borderRadius": 6,
+            "borderWidth": 1,
+            "flex": 1,
+            "fontSize": 13,
+            "height": 26,
+            "padding": 4,
+          },
+          Object {
+            "height": 40,
+          },
+        ]
+      }
+      underlineColorAndroid="transparent"
+      value=""
+    />
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "flexDirection": "row",
+          "height": 40,
+          "marginHorizontal": 10,
+          "marginVertical": 10,
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "flex-end",
+          "height": 40,
+          "marginRight": 10,
+          "paddingTop": 2,
+          "width": 80,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        Value (ETH)
+      </Text>
+    </View>
+    <TextInput
+      allowFontScaling={true}
+      autoCapitalize="none"
+      autoCorrect={false}
+      keyboardType="decimal-pad"
+      onChangeText={[Function]}
+      style={
+        Object {
+          "backgroundColor": "white",
+          "borderColor": "gray",
+          "borderRadius": 6,
+          "borderWidth": 1,
+          "flex": 1,
+          "fontSize": 13,
+          "height": 26,
+          "padding": 4,
+        }
+      }
+      underlineColorAndroid="transparent"
+      value=""
+    />
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "margin": 15,
+        },
+        undefined,
+      ]
+    }
+  >
+    <View
+      accessibilityComponentType={undefined}
+      accessibilityLabel={undefined}
+      accessibilityTraits="button"
+      accessible={true}
+      collapsable={undefined}
+      hitSlop={undefined}
+      isTVSelectable={true}
+      nativeID={undefined}
+      onLayout={undefined}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "flexDirection": "row",
+          "height": 50,
+          "opacity": 1,
+          "overflow": "hidden",
+          "width": 150,
+        }
+      }
+      testID={undefined}
+      tvParallaxProperties={undefined}
+    >
+      <BVLinearGradient
+        collapsable={false}
+        colors={
+          Array [
+            4281228970,
+            4281228970,
+          ]
+        }
+        end={
+          Object {
+            "x": 1,
+            "y": 1,
+          }
+        }
+        locations={null}
+        start={
+          Object {
+            "x": 0,
+            "y": 0,
+          }
+        }
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "flex": 1,
+            },
+            undefined,
+            Object {
+              "borderRadius": 5,
+            },
+            null,
+          ]
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "alignItems": "center",
+                  "bottom": 0,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                null,
+              ]
+            }
+          >
+            <Text
+              accessible={true}
+              allowFontScaling={true}
+              collapsable={undefined}
+              ellipsizeMode="tail"
+              style={
+                Object {
+                  "color": "white",
+                  "flexDirection": "row",
+                  "fontSize": 14,
+                  "letterSpacing": 2,
+                  "opacity": 1,
+                  "transform": Array [
+                    Object {
+                      "translateY": 0,
+                    },
+                  ],
+                }
+              }
+            >
+              Send
+            </Text>
+          </View>
+          <View
+            style={
+              Array [
+                Object {
+                  "alignItems": "center",
+                  "bottom": 0,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
+                },
+                Object {
+                  "flexDirection": "column",
+                },
+              ]
+            }
+          >
+            <View
+              collapsable={undefined}
+              style={
+                Object {
+                  "opacity": 0,
+                  "transform": Array [
+                    Object {
+                      "translateY": -100,
+                    },
+                  ],
+                }
+              }
+            >
+              <RNSpinkit
+                color={4294967295}
+                size={25}
+                style={
+                  Array [
+                    Object {
+                      "height": 25,
+                      "width": 25,
+                    },
+                    Array [
+                      Object {},
+                      undefined,
+                    ],
+                  ]
+                }
+                type="Wave"
+              />
+            </View>
+            <Text
+              accessible={true}
+              allowFontScaling={true}
+              collapsable={undefined}
+              ellipsizeMode="tail"
+              style={
+                Object {
+                  "color": "white",
+                  "flexDirection": "row",
+                  "fontSize": 14,
+                  "letterSpacing": 2,
+                  "opacity": 0,
+                  "transform": Array [
+                    Object {
+                      "translateY": -50,
+                    },
+                  ],
+                }
+              }
+            >
+              Sending...
+            </Text>
+          </View>
+        </View>
+      </BVLinearGradient>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`whole app renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <ActivityIndicator
+    animating={true}
+    color="#999999"
+    hidesWhenStopped={true}
+    size="large"
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  >
+    Loading...
+  </Text>
+</View>
+`;

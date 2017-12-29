@@ -65,7 +65,7 @@ export default class Notifications extends React.Component {
                 let eTx = new global.ethUtil.Tx(item.signed_tx)
                 let txHash = '0x' + eTx.hash(true).toString('hex')
                 console.log('txHash is ' + txHash)
-                let url = global.sdkdConfig.moduleConfig.wallet.etherscanHost + '/tx/' + txHash
+                let url = global.rnEthKitConfig.moduleConfig.wallet.etherscanHost + '/tx/' + txHash
                 Linking.openURL(url)
                 .catch(err => console.error('An error occurred', err))
               }}

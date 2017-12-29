@@ -1,0 +1,10 @@
+{
+  "name": "react-native-ethereum-kit",
+  "main": "index.js",
+  "version": "0.0.10",
+  "license": "MS-RSL",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}

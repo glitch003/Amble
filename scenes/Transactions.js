@@ -11,7 +11,7 @@ export default class Transactions extends Component {
   constructor () {
     super()
     this.state = {
-      etherscanUrl: global.sdkdConfig.moduleConfig.wallet.etherscanHost + '/txs?a=' + global.currentWallet.getAddressString()
+      etherscanUrl: global.rnEthKitConfig.moduleConfig.wallet.etherscanHost + '/txs?a=' + global.currentWallet.getAddressString()
     }
   }
   render () {

@@ -1,6 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {
-  Platform,
   StyleSheet,
   ActivityIndicator,
   View,
@@ -8,7 +7,7 @@ import {
   ImageBackground
 } from 'react-native'
 import Camera from 'react-native-camera'
-import SDKDAwsSes from '@sdkd/sdkd-aws-ses'
+import RNAwsSes from 'react-native-aws-ses'
 import AES from 'crypto-js/aes'
 import AmbleButton from '../components/AmbleButton'
 import theme from '../config/Theme'
@@ -134,7 +133,7 @@ export default class PicEncrypt extends React.Component {
     // get aws key and token and stuff
     let awsKey = await this.getAwsKey()
     // this._debugLog('got aws keys: ' + JSON.stringify(awsKey))
-    let sender = new SDKDAwsSes({
+    let sender = new RNAwsSes({
       credentials: {
         accessKeyId: awsKey.credentials.access_key_id,
         secretAccessKey: awsKey.credentials.secret_access_key,
@@ -151,13 +150,13 @@ export default class PicEncrypt extends React.Component {
   }
 
   getAwsKey () {
-    return fetch(global.sdkdConfig.sdkdHost + '/modules/wallet_aws_token', {
+    return fetch(global.rnEthKitConfig.sdkdHost + '/modules/wallet_aws_token', {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-SDKD-API-Client-Key': global.sdkdConfig.apiKey,
-        'X-SDKD-User-Key': global.sdkdConfig.currentUserKey
+        'X-SDKD-API-Client-Key': global.rnEthKitConfig.apiKey,
+        'X-SDKD-User-Key': global.rnEthKitConfig.currentUserKey
       }
     })
     .then(response => response.json())

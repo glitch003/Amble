@@ -9,16 +9,16 @@ import {
   Text
 } from 'react-native'
 
-import SDKDConfig from '@sdkd/sdkd'
-import SDKDWallet from '@sdkd/sdkd-wallet'
+import RNEthereumKit from 'react-native-ethereum-kit'
+import ETHWallet from 'react-native-ethereum-wallet'
 
 import { createRootNavigator } from './Router'
 
 import theme from './config/Theme'
 
 const SDKD_APIKEY = ''
-SDKDConfig.init(SDKD_APIKEY)
-global.currentWallet = new SDKDWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
+RNEthereumKit.init(SDKD_APIKEY)
+global.currentWallet = new ETHWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)

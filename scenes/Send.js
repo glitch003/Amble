@@ -4,8 +4,6 @@ import {
   Text,
   View,
   TextInput,
-  TouchableOpacity,
-  Image,
   Linking,
   Alert
 } from 'react-native'
@@ -138,7 +136,7 @@ export default class Send extends React.Component {
             text: 'View on Etherscan',
             onPress: () => {
               // take the user to etherscan with tx id of result
-              let url = global.sdkdConfig.moduleConfig.wallet.etherscanHost + '/tx/' + result
+              let url = global.rnEthKitConfig.moduleConfig.wallet.etherscanHost + '/tx/' + result
               // pop to home after opening link
               Linking.openURL(url)
               .then(result => {

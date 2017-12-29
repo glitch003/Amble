@@ -10,32 +10,16 @@ import {
 import theme from '../config/Theme'
 
 export default class Receive extends React.Component {
-  // constructor () {
-  //   super()
-  //   this.state = {
-  //     notifications: []
-  //   }
-  // }
-  // componentWillMount () {
-  //   global.currentWallet.getNotifications()
-  //   .then(response => {
-  //     this.setState({ notifications: response })
-  //   })
-  // }
+  constructor (props) {
+    super(props)
+    this.state = {
+      addressString: props.address || global.currentWallet.getAddressString()
+    }
+  }
   render () {
-    // use this snippet as an example of how you can recover a user's account from a QR code that was sent to their email
-    // if (this.state.recovering) {
-    //   return this.state.wallet.renderRecoveryQRScanner(() => {
-    //     console.log('wallet has been recovered')
-    //     console.log('address is ' + this.state.wallet.getAddressString())
-    //     this.setState({recovering: false})
-    //     this.state.wallet.getBalance()
-    //     .then(balance => this.setState({balance}))
-    //   })
-    // }
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => Clipboard.setString(global.currentWallet.getAddressString())}>
+        <TouchableOpacity onPress={() => Clipboard.setString(this.state.addressString)}>
           <Text style={styles.yourAddress}>
             Your address:
           </Text>
@@ -45,11 +29,11 @@ export default class Receive extends React.Component {
             allowFontScaling
             minimumFontScale={1}
             numberOfLines={1}>
-            {global.currentWallet.getAddressString()}
+            {this.state.addressString}
           </Text>
         </TouchableOpacity>
         <View style={styles.qrCode}>
-          {global.currentWallet.renderAddressQRCode()}
+          {global.currentWallet.renderAddressQRCode(this.state.addressString)}
         </View>
       </View>
     )

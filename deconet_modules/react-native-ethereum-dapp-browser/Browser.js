@@ -36,7 +36,7 @@ export default class Browser extends Component {
   }
   componentWillMount () {
     // get web3 script to inject
-    let url = global.sdkdConfig.sdkdStaticHost + '/web3.min.js'
+    let url = global.rnEthKitConfig.sdkdStaticHost + '/web3.min.js'
     // let url = 'http://localhost:3000/web3mobile/lib/web3.js'
     console.log('getting url ' + url)
     fetch(url)
@@ -50,7 +50,7 @@ export default class Browser extends Component {
       // window.chrome is a hack to make this work with cryptokitties
       let web3Mobile = {
         selectedAddress: global.currentWallet.getAddressString(),
-        rpcUrl: global.sdkdConfig.moduleConfig.wallet.ethNodeHost
+        rpcUrl: global.rnEthKitConfig.moduleConfig.wallet.ethNodeHost
       }
       response = `window.chrome = {webstore: true};
       window.web3Mobile = ${JSON.stringify(web3Mobile)};
@@ -99,8 +99,8 @@ export default class Browser extends Component {
       )
     }
     // let url = 'https://tetzelcoin.com/#/confess'
-    // let url = global.sdkdConfig.sdkdStaticHost + '/web3test.html'
-    // let url = global.sdkdConfig.sdkdStaticHost + '/web3mobile-pentest.htm'
+    // let url = global.rnEthKitConfig.sdkdStaticHost + '/web3test.html'
+    // let url = global.rnEthKitConfig.sdkdStaticHost + '/web3mobile-pentest.htm'
     // let url = 'https://oasisdex.com'
     // let url = 'https://cryptokitties.co'
     // let url = 'https://myetherwallet.com/signmsg.html'

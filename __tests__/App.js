@@ -1,10 +1,12 @@
 import 'react-native'
 import React from 'react'
-import App from '../App'
 import MockAsyncStorage from 'mock-async-storage'
-
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
+
+import App from '../App'
+import Send from '../scenes/Send'
+import Receive from '../scenes/Receive'
 
 jest.mock('WebView', () => 'WebView')
 
@@ -52,11 +54,32 @@ const mockStorage = () => {
   const mockImpl = new MockAsyncStorage()
   jest.mock('AsyncStorage', () => mockImpl)
 }
- 
-mockStorage();
 
-it('renders correctly', () => {
+mockStorage()
+
+it('whole app renders correctly', () => {
   const tree = renderer.create(
     <App />
-  )
+  ).toJSON()
+  expect(tree).toMatchSnapshot()
+})
+
+it('send screen renders correctly', () => {
+  const tree = renderer.create(
+    <Send
+      navigation={{
+        state: {
+          params: {}
+        }
+      }}
+    />
+  ).toJSON()
+  expect(tree).toMatchSnapshot()
+})
+
+it('receive screen renders correctly', () => {
+  const tree = renderer.create(
+    <Receive address='12345' />
+  ).toJSON()
+  expect(tree).toMatchSnapshot()
 })
