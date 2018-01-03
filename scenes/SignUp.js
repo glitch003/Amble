@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   AsyncStorage,
-  Platform
+  Platform,
+  Alert
 } from 'react-native'
 
 import theme from '../config/Theme'
@@ -89,7 +90,14 @@ export default class SignUp extends React.Component {
       AsyncStorage.setItem('amble_user_email', this.state.email)
       this.props.navigation.navigate('SignedIn')
     })
-    .catch(err => { throw new Error(err) })
+    .catch(err => {
+      console.log('error in signup:')
+      console.log(err)
+      if (err.message) {
+        this.setState({ buttonState: 'submit' })
+        Alert.alert('Error', err.message)
+      }
+    })
   }
 }
 

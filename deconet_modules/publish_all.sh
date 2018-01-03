@@ -1,20 +1,24 @@
 #!/bin/bash
 
-cd sdkd
+cd react-native-ethereum-kit
 npm publish
 
 cd ..
-cd sdkd-aws-ses
+cd react-native-aws-ses
 npm publish
 
 cd ..
-cd sdkd-aws-signer
+cd react-native-aws-signer
 npm publish
 
 cd ..
-cd sdkd-ssss
+cd react-native-ethereum-wallet
 npm publish
 
 cd ..
-cd sdkd-wallet
+cd react-native-ethereum-dapp-browser
+npm publish
+
+cd ..
+cd react-native-shamirs-sss
 npm publish

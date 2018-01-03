@@ -162,6 +162,7 @@ export default class ETHWallet {
             this._walletReady()
             resolve()
           })
+          .catch(err => reject(new Error(err)))
         } else {
           // create new wallet
           this._registerUser()
@@ -312,6 +313,7 @@ export default class ETHWallet {
         this._walletReady()
         resolve()
       })
+      .catch(err => reject(new Error(err)))
     })
   }
 
@@ -779,12 +781,13 @@ export default class ETHWallet {
       this.sdkdAjaxReq.authenticateUser(body)
       .then(response => {
         this._debugLog(JSON.stringify(response))
+        this._debugLog(typeof response)
         if (response.error) {
           reject(response.error)
+          return
         }
         // save JWT
         global.rnEthKitConfig.currentUserKey = response.jwt
-        this._debugLog(JSON.stringify(response))
         resolve(response.jwt)
       })
       .catch(err => { reject(err) })
