@@ -843,7 +843,7 @@ export default class ETHWallet {
     })
     let url = qrgen(qrData)
     let body = 'Your recovery key is ' + part
-    this._sendEmail(this.email, 'Your recovery key for SDKD', body, [url])
+    this._sendEmail(this.email, 'Your recovery key for SDKD - DO NOT DELETE THIS', body, [url])
     this._debugLog('emailed key part 0')
   }
 
