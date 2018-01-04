@@ -4,7 +4,8 @@ import {
   Alert,
   Platform,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  BackHandler
 } from 'react-native'
 
 // import theme from '../config/Theme'
@@ -70,6 +71,16 @@ export default class Browser extends Component {
       //   this.setState({web3Js: debugResponse + '\n' + response})
       // })
     })
+
+    // this is to handle the back button on android and go back in the browser instead of go back to the last page via the navigator
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      console.log('route name is ' + this.props.navigation.state.routeName)
+      if (this.props.navigation.state.routeName === 'Browser' && this.browser) {
+        this.browser.goBack()
+        return true
+      }
+      return false
+    })
   }
   componentDidMount () {
     // tx payload for testing
@@ -113,8 +124,8 @@ export default class Browser extends Component {
         hideToolbar={true}
         hideAddressBar={false}
         hideStatusBar={true}
-        foregroundColor={'white'/*theme.headerTintColor*/}
-        backgroundColor={'black'/*theme.headerStyle.backgroundColor*/}
+        foregroundColor={'white'}
+        backgroundColor={'black'}
         webviewProps={{
           onMessage: this.webviewMessage.bind(this),
           injectedJavaScript: this.state.injectedJs,
