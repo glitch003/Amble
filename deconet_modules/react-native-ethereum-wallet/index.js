@@ -252,7 +252,7 @@ export default class ETHWallet {
     )
   }
 
-  sendTx (to, value, data) {
+  sendTx (to, value, data = '') {
     this._debugLog('sendTx')
     let { privKey } = privates.get(this)
 

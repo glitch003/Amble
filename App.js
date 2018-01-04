@@ -16,8 +16,8 @@ import { createRootNavigator } from './Router'
 
 import theme from './config/Theme'
 
-const SDKD_APIKEY = ''
-RNEthereumKit.init(SDKD_APIKEY)
+const RNETHKIT_APIKEY = ''
+RNEthereumKit.init(RNETHKIT_APIKEY)
 global.currentWallet = new ETHWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
 
 // use this to debug the JS bridge

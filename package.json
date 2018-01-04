@@ -56,7 +56,9 @@
   "devDependencies": {
     "babel-jest": "21.2.0",
     "babel-preset-react-native": "4.0.0",
+    "isomorphic-fetch": "^2.2.1",
     "jest": "21.2.1",
+    "jest-fetch-mock": "^1.4.0",
     "mock-async-storage": "^2.0.2",
     "react-test-renderer": "16.0.0",
     "rn-nodeify": "github:mvayngrib/rn-nodeify"
@@ -65,6 +67,9 @@
     "preset": "react-native",
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@sdkd|react-native-keychain|react-native-qrcode|react-navigation)"
+    ],
+    "setupFiles": [
+      "./setupJest.js"
     ]
   },
   "react-native": {
