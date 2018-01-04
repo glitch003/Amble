@@ -134,7 +134,7 @@ export default class ETHWallet {
     this.ethFuncs = ethFuncs
     this.ethUtil = ethUtil
     this.etherUnits = etherUnits
-    this.defaultGasPrice = '60'
+    this.defaultGasPrice = '20'
     this._configurePushNotifications()
     this._configureMEWNode()
   }
