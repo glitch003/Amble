@@ -1,8 +1,8 @@
 {
   "name": "react-native-aws-signer",
   "main": "index.js",
-  "version": "0.0.3",
-  "license": "MIT",
+  "version": "1.0.0",
+  "license": "GPLv3",
   "dependencies": {
     "react-native-crypto": "^2.1.1",
     "url-parse": "^1.1.9"

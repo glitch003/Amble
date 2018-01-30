@@ -2,6 +2,8 @@
 
 This module is used to configure RN Eth Kit.
 
-Check out the github repo for docs and more info on how to use this library: https://github.com/glitch003/react-native-distributed-dev-kit
+There are a number of react native ethereum modules that can used with this kit:
 
-You will need to obtain an API key which can be done by signing up [here](https://app.sdkd.co)
+* [react-native-ethereum-wallet](https://modules.deco.network/chris/react-native-ethereum-wallet)
+
+To use this, you will need to obtain an API key which can be done by signing up [here](https://app.sdkd.co)

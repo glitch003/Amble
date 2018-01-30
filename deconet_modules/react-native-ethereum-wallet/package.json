@@ -1,12 +1,12 @@
 {
   "name": "react-native-ethereum-wallet",
   "main": "index.js",
-  "version": "0.0.50",
-  "license": "MS-RSL",
+  "version": "1.0.0",
+  "license": "GPLv3",
   "dependencies": {
-    "react-native-ethereum-kit": "0.0.10",
-    "@sdkd/sdkd-aws-ses": "0.0.2",
-    "@sdkd/sdkd-ssss": "0.0.2",
+    "react-native-ethereum-kit": "1.0.0",
+    "react-native-aws-ses": "1.0.0",
+    "react-native-shamirs-sss": "1.0.0",
     "bignumber.js": "^4.1.0",
     "bip39": "^2.4.0",
     "ethereumjs-tx": "^1.3.3",

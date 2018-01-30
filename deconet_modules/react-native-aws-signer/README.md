@@ -1,10 +1,6 @@
-# SDKD Aws Signer
+# RN Aws Signer
 
 This module is used to sign requests destined for AWS using their Signature V4 format.
-
-Check out the github repo for docs and more info on how to use this library: https://github.com/glitch003/react-native-distributed-dev-kit
-
-You will need to obtain an API key which can be done by signing up [here](https://app.sdkd.co)
 
 Note that this module depends on https://github.com/mvayngrib/react-native-crypto so you should follow those installation instructions as well.
 
@@ -35,7 +31,7 @@ let postBody = Object.keys(postBodyObj)
 .join('&')
 
 // create the signer 
-let signer = new SDKDAwsSigner(config)
+let signer = new RNAwsSigner(config)
 
 // Sign the request
 var request = {

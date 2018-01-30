@@ -18,7 +18,7 @@ import theme from './config/Theme'
 
 const RNETHKIT_APIKEY = ''
 RNEthereumKit.init(RNETHKIT_APIKEY)
-global.currentWallet = new ETHWallet({debug: true, gcmSenderId: '1048585096908', network: 'ropsten'})
+global.currentWallet = new ETHWallet({debug: true, network: 'ropsten'})
 
 // use this to debug the JS bridge
 // require('MessageQueue').spy(true)
